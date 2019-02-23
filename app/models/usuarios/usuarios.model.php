@@ -24,6 +24,7 @@
                 ->select('id_banco, num_cuenta')
                 ->from('cuentas')
                 ->where('id_usuario')->eq('idUsuario')
+                ->_and('id_banco')->eq('idBanco')
                 ->exec($params) ;
         }
     }

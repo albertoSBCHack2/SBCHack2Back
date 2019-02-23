@@ -15,7 +15,8 @@
         //Método para obtener las cuentas de los usuarios.
         public function getAccounts( $request ) {
             $params = [
-                'idUsuario' => $request->getParams('idUsuario')
+                'idUsuario' => $request->getParams('idUsuario'),
+                'idBanco' => $request->getParams('idBanco')
             ];
 
             return $this->getDomain('usuarios', 'usuarios')->getAccounts( $params );
