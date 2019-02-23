@@ -19,65 +19,6 @@
             return json_decode($oCurl->post( http_build_query($body) ));
         }
 
-        public static function consultaCuentas( $params ) {
-            $lean = Lean::getInstance();
-            $banregioConfig = $lean->getConfig('banregioData');
-            $uri =  $banregioConfig['banregioBaseUrl'].'/v1/accounts';
-            if (isset($params['idCuenta'])) {
-              $uri.=$params['idCuenta'];
-            }
-
-            $header = [
-              'Authorization: Bearer '.$params['token']
-            ];
-
-            $oCurl = new CurlComponent([
-                'url' => $banregioConfig['banregioBaseUrl'].'/v1/accounts',
-                'headers' => [
-                  str_replace( '{token}', $params['token'], self::$headerString )
-                ],
-                'followLocation' => 1
-            ]);
-            $response = json_decode($oCurl->get());
-            if ($response->error) {
-                $tokenData = self::refrescarToken($params);
-                $retryParams = [
-                    'idCuenta' => $params['idCuenta'],
-                    'token' => $tokenData['access_token'],
-                ];
-                self::consultaTransacciones($retryParams);
-            }
-            return $response;
-        }
-
-        public static function consultaTransacciones( $params ) {
-            $lean = Lean::getInstance();
-            $banregioConfig = $lean->getConfig('banregioData');
-
-            $header = [
-              'Authorization: Bearer '.$params['token']
-            ];
-
-            $oCurl = new CurlComponent([
-                'url' => $banregioConfig['banregioBaseUrl'].'/v1/accounts/'.$params['idCuenta'].'/transactions',
-                'headers' => [
-                  str_replace( '{token}', $params['token'], self::$headerString )
-                ],
-                'followLocation' => 1
-            ]);
-            $response = json_decode($oCurl->get());
-            if ($response->error) {
-                $tokenData = self::refrescarToken($params);
-                $retryParams = [
-                    'idCuenta' => $params['idCuenta'],
-                    'token' => $tokenData['access_token'],
-                ];
-                self::consultaTransacciones($retryParams);
-            }
-            return $response;
-
-        }
-
         private static function refrescarToken($params) {
             $lean = Lean::getInstance();
             $banregioConfig = $lean->getConfig('banregioData');
