@@ -21,5 +21,13 @@
 
             return $this->getDomain('usuarios', 'usuarios')->getAccounts( $params );
         }
+
+        public function getGodFathers( $request ) {
+            $params = [
+                'idUsuario' => $request->getParams('idUser')
+            ];
+
+            return $this->getDomain('usuarios', 'padrinos')->obtener( $params );
+        }
     }
 ?>
