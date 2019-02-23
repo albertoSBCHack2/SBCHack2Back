@@ -1,7 +1,7 @@
 <?php
 	return [
 		'logIn' => [
-			'nom_usuario' => [
+			'nomUsuario' => [
 				'constraint' => ['required' => true],
 				'message' => 'Debe ingresar el nombre del usuario.'
 			],
