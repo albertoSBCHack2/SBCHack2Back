@@ -16,7 +16,7 @@
         public function getAccounts( $request ) {
             $params = [
                 'idUsuario' => $request->getParams('idUsuario'),
-                'idBanco' => $request->getParams('idBanco')
+                'idBanco' => $request->getQuery('idBanco')
             ];
 
             return $this->getDomain('usuarios', 'usuarios')->getAccounts( $params );
