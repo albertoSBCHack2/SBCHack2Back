@@ -26,5 +26,27 @@
         
             return $this->getDomain('api', 'hsbc')->getBalanceByAccount( $params );
          }
+
+         //Método para obtener los movimientos
+         public function getCheckingAccountStatement( $request ) {
+            $params = [
+                'accountNumber' => $request->getQuery('accountNumber'),
+                'movementsNumber' => $request->getQuery('movementsNumber')
+            ];
+        
+            return $this->getDomain('api', 'hsbc')->getCheckingAccountStatement( $params );
+         }
+
+         //Método para hacer transferencias.
+         public function transfer( $request ) {
+            $params = [
+                'sourceAccount' => $request->getQuery('sourceAccount'),
+                'destinationAccount' => $request->getQuery('destinationAccount'),
+                'transactionAmount' => $request->getQuery('transactionAmount'),
+                'description' => $request->getQuery('description')
+            ];
+        
+            return $this->getDomain('api', 'hsbc')->transfer( $params );
+         }
     }
 ?>

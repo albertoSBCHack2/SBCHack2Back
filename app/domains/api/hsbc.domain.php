@@ -3,6 +3,7 @@
 
     class HsbcDomain extends BaseDomain {
         private $headers = [
+            'Content-Type: application/json',
             'X-User: TEAM3',
             'X-Client: 2c949686cdff4ffd82d0d49eb4d3a64c',
             'X-Password: 36B9527021234dB590B7875e31b68A7D',
@@ -58,20 +59,47 @@
             return $responseJSON['accountBalance'];
         }
 
-        //Método para obtener el balance por número de cuenta.
-        public function getBalanceByAccount( $params ) {
+        //Método para obtener los movimientos.
+        public function getCheckingAccountStatement( $params ) {
             $oCurl = new CurlComponent([
-                'url' => $this->baseURL . '/v1/sandbox/checking-accounts/balance?accountNumber=' . $params['accountNumber'],
+                'url' => $this->baseURL . '/v1/sandbox/checking-accounts/account-statement' . 
+                    '?accountNumber=' . $params['accountNumber'] .
+                    '&movementsNumber=' . $params['movementsNumber'],
                 'headers' => $this->headers
             ]);
             $response = $oCurl->get();
             $responseJSON = json_decode( $response, true );
 
-            if( !isset( $responseJSON['accountBalance'] ) ) {
+            if( !isset( $responseJSON['historicalMovements'] ) ) {
                 $this->setError('Cuenta no existe.');
             }
 
-            return $responseJSON['accountBalance'];
+            return $responseJSON['historicalMovements'];
+        }
+
+        //Método para hacer transferencias.
+        public function transfer( $params ) {
+            $oCurl = new CurlComponent([
+                'url' => $this->baseURL . '/v1/sandbox/checking-accounts/transfer' . 
+                    '?accountNumber=' . $params['accountNumber'] .
+                    '&movementsNumber=' . $params['movementsNumber'],
+                'headers' => $this->headers
+            ]);
+            $response = $oCurl->post(http_build_query([
+                'transaction' => [
+                    'sourceAccount' => $params['sourceAccount'],
+                    'destinationAccount' => $params['destinationAccount'],
+                    'transactionAmount' => $params['transactionAmount'],
+                    'description' => $params['description']
+                ]
+            ]));
+            $responseJSON = json_decode( $response, true );
+
+            if( !isset( $responseJSON['historicalMovements'] ) ) {
+                $this->setError('Cuenta no existe.');
+            }
+
+            return $responseJSON['historicalMovements'];
         }
     }
 ?>
