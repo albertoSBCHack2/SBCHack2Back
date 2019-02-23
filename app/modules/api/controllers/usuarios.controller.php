@@ -29,5 +29,25 @@
 
             return $this->getDomain('usuarios', 'padrinos')->obtener( $params );
         }
+
+        //Métodos para agregar ahijados.
+        public function agregarAhijado( $request ) {
+            $params = [
+                'idUsuarioPadrino' => $request->getBody('idUsuarioPadrino'),
+                'idUsuarioAhijado' => $request->getBody('idUsuarioAhijado')
+            ];
+
+            $this->getDomain('usuarios', 'ahijados')->agregar( $params );
+        }
+
+        //Métodos para agregar padrinos.
+        public function agregarPadrino( $request ) {
+            $params = [
+                'idUsuarioPadrino' => $request->getBody('idUsuarioPadrino'),
+                'idUsuarioAhijado' => $request->getBody('idUsuarioAhijado')
+            ];
+
+            $this->getDomain('usuarios', 'padrinos')->agregar( $params );
+        }
     }
 ?>
