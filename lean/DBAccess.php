@@ -139,7 +139,7 @@
 
 						if( !self::$cnns[ $this->idCnn ]['oCnn'] )
 						{
-							$this->lean->addConnectionError( 'lean', 'Failed to connect to database "' . $this->cnnData['db'] . '".' );
+							$this->lean->setConnectionError( 'Failed to connect to database "' . $this->cnnData['db'] . '".' );
 						}
 
 						self::$cnns[ $this->idCnn ]['oCnn']->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
@@ -153,7 +153,7 @@
 					}
 					else
 					{
-						$this->lean->addConnectionError( 'lean', 'Unsupported database engine (' . $this->cnnData['dbType'] . ').' );
+						$this->lean->setConnectionError( 'Unsupported database engine (' . $this->cnnData['dbType'] . ').' );
 					}
 				}
 
@@ -169,7 +169,7 @@
 					$message = utf8_encode( $message );
 				}
 
-				$this->lean->addConnectionError( 'lean', 'Error connecting to database "' . $this->idCnn . '.' . $this->cnnData['db'] . '". (' . $message . ')' );
+				$this->lean->setConnectionError( 'Error connecting to database "' . $this->idCnn . '.' . $this->cnnData['db'] . '". (' . $message . ')' );
 			}
 		}
 
@@ -1629,7 +1629,7 @@
 					$cnn['stmt'] = null;
 				}
 			} catch( \PDOException $e ) {
-				$this->lean->addConnectionError( 'lean', 'Error closing database connections. (' . $e->getMessage() . ')' );
+				$this->lean->setConnectionError( 'Error closing database connections. (' . $e->getMessage() . ')' );
 			}
 		}
 
