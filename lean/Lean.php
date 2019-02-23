@@ -793,15 +793,15 @@ class Lean {
         return $contentFile;
     }
 
-    ///Método para validar las políticas de los controladores.
+    //Método para validar las reglas.
     public function checkPolicies( $fileName, $data, $policyKey = null ) {
         $module = $this->getResponseModule();
-        $rules = array();
+        $rules = '';
         $policies = null;
         $policyRoutefile = _MODULES . '/' . $module . '/policies/' . $fileName . '.policy.php';
 
         if( count( glob( $policyRoutefile ) ) ) {
-            $policies = require $policyRoutefile;
+            $policies = require_once $policyRoutefile;
             
             if( $policyKey ) {
                 if( isset( $policies[$policyKey] ) && is_array( $policies[$policyKey] ) ) {
@@ -841,56 +841,56 @@ class Lean {
                     switch( $keyConstraint ) {
                         case 'required':
                             if( $valConstraint && ( is_null( $value ) || $value === '' ) ) {
-                                array_push( $rules, $message );
+                                $rules = $message;
                             }
 
                             break;
 
                         case 'gt':
                             if( is_null( $value ) || !is_numeric( $value ) || !( $value * 1 > $valConstraint ) ) {
-                                array_push( $rules, str_replace( '{gt}', $valConstraint, $message ) );
+                                $rules = str_replace( '{gt}', $valConstraint, $message );
                             }
 
                             break;
 
                         case 'gte':
                             if( is_null( $value ) || !is_numeric( $value ) || !( $value * 1 >= $valConstraint ) ) {
-                                array_push( $rules, str_replace( '{gte}', $valConstraint, $message ) );
+                                $rules = str_replace( '{gte}', $valConstraint, $message );
                             }
 
                             break;
 
                         case 'lt':
                             if( is_null( $value ) || !is_numeric( $value ) || !( $value * 1 < $valConstraint ) ) {
-                                array_push( $rules, str_replace( '{lt}', $valConstraint, $message ) );
+                                $rules = str_replace( '{lt}', $valConstraint, $message );
                             }
 
                             break;
 
                         case 'lte':
                             if( is_null( $value ) || !is_numeric( $value ) || !( $value * 1 <= $valConstraint ) ) {
-                                array_push( $rules, str_replace( '{lte}', $valConstraint, $message ) );
+                                $rules = str_replace( '{lte}', $valConstraint, $message );
                             }
 
                             break;
 
                         case 'email':
                             if( $valConstraint && ( $value && !filter_var( $value, FILTER_VALIDATE_EMAIL ) ) ) {
-                                array_push( $rules, $message );
+                                $rules = $message;
                             }
 
                             break;
 
                         case 'minLength':
                             if( $value && strlen( $value ) < $valConstraint ) {
-                                array_push( $rules, $message );
+                                $rules = $message;
                             }
 
                             break;
 
                         case 'maxLength':
                             if( $value && strlen( $value ) > $valConstraint ) {
-                                array_push( $rules, $message );
+                                $rules = $message;
                             }
 
                             break;
@@ -899,9 +899,13 @@ class Lean {
             } else {
                 $this->setDevError( 'It is neccesary to define the attribute "constraint" for the element: "' . $key . '".' );
             }
+
+            if( $rules !== '' ) {
+                break;
+            }
         }
 
-        if( count( $rules ) > 0 ) {
+        if( $rules !== '' ) {
             $this->setBRError( $rules );
         }
     }

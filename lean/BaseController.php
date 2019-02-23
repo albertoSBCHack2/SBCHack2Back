@@ -38,7 +38,7 @@ class BaseController {
         $this->lean->getLogger()->log( 4, $event );
     }
 
-    public function checkPolicies( $module, $fileName, $key, $data ) {
-        $this->lean->checkPolicies( $module, $fileName, $key, $data );
+    public function checkPolicies( $fileName, $data, $key ) {
+        $this->lean->checkPolicies( $fileName, $data, $key );
     }
 }
