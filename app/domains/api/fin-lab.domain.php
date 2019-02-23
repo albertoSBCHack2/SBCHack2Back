@@ -19,7 +19,7 @@
             return $responseJSON['data']['balance_result'];
         }
 
-        //Método para obtener el los movimientos.
+        //Método para obtener los movimientos.
         public function getTransactions( $params ) {
             $oCurl = new CurlComponent([
                 'url' => $this->baseURL . '/v2/bank/' . $params['accountNumber'] . '/transactions'

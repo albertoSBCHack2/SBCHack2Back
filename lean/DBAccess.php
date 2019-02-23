@@ -257,14 +257,15 @@
 			} catch( \PDOException $e ) {
 				$queryString = '';
 				$queryValues = '';
-
+				
 				if( is_array( $pQuery ) ) {
 					$queryString = $pQuery['query'];
 					$queryValues = ' | ' . implode( ',', $pQuery['bindParams'] );
 				} else {
 					$queryString = $pQuery;
 				}
-				$this->lean->setDBError( $this->idCnn, $this->tables, $e->getMessage() . ' -> ( ' . $this->idCnn . ' | ' . $queryString . $queryValues . ' )' );
+
+				$this->lean->setDBError( $e->getMessage() . ' -> ( ' . $this->idCnn . ' | ' . $queryString . $queryValues . ' )' );
 			}
 
 			return $query;

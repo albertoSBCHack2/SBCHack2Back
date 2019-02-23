@@ -11,5 +11,14 @@
 
             return $this->getDomain('usuarios', 'usuarios')->logIn( $params );
         }
+
+        //Método para obtener las cuentas de los usuarios.
+        public function getAccounts( $request ) {
+            $params = [
+                'idUsuario' => $request->getParams('idUsuario')
+            ];
+
+            return $this->getDomain('usuarios', 'usuarios')->getAccounts( $params );
+        }
     }
 ?>
