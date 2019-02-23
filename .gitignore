@@ -1,0 +1,7 @@
+*.DS_Store
+**/*.DS_Store
+/vendor/
+files/*
+Web.config
+storage
+app/console/nohup.out
