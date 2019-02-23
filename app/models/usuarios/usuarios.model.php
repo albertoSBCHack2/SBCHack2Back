@@ -5,7 +5,7 @@
             if( isset( $params['contrasena'] ) ) {
                 $params['contrasena'] = hash( 'sha256', $params['contrasena'] ); 
             }
-
+ 
             return $this->connection
                 ->select('id_usuario, nombre, celular')
                 ->from('usuarios')
