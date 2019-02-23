@@ -79,27 +79,27 @@
 
         //Método para hacer transferencias.
         public function transfer( $params ) {
-            $oCurl = new CurlComponent([
-                'url' => $this->baseURL . '/v1/sandbox/checking-accounts/transfer' . 
-                    '?accountNumber=' . $params['accountNumber'] .
-                    '&movementsNumber=' . $params['movementsNumber'],
-                'headers' => $this->headers
-            ]);
-            $response = $oCurl->post(http_build_query([
+            $transaction = [
                 'transaction' => [
                     'sourceAccount' => $params['sourceAccount'],
                     'destinationAccount' => $params['destinationAccount'],
                     'transactionAmount' => $params['transactionAmount'],
                     'description' => $params['description']
                 ]
-            ]));
+            ];
+
+            $oCurl = new CurlComponent([
+                'url' => $this->baseURL . '/v1/sandbox/checking-accounts/transfer',
+                'headers' => $this->headers
+            ]);
+            $response = $oCurl->post( json_encode( $transaction ) );
             $responseJSON = json_decode( $response, true );
 
-            if( !isset( $responseJSON['historicalMovements'] ) ) {
-                $this->setError('Cuenta no existe.');
+            if( !isset( $responseJSON['transferResponse'] ) ) {
+                $this->setError('Hubo un problema al generar la transerencia con HSBC.');
             }
 
-            return $responseJSON['historicalMovements'];
+            return $responseJSON['transferResponse'];
         }
     }
 ?>

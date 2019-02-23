@@ -40,12 +40,12 @@
          //Método para hacer transferencias.
          public function transfer( $request ) {
             $params = [
-                'sourceAccount' => $request->getQuery('sourceAccount'),
-                'destinationAccount' => $request->getQuery('destinationAccount'),
-                'transactionAmount' => $request->getQuery('transactionAmount'),
-                'description' => $request->getQuery('description')
+                'sourceAccount' => $request->getBody('sourceAccount'),
+                'destinationAccount' => $request->getBody('destinationAccount'),
+                'transactionAmount' => $request->getBody('transactionAmount'),
+                'description' => $request->getBody('description')
             ];
-        
+ 
             return $this->getDomain('api', 'hsbc')->transfer( $params );
          }
     }

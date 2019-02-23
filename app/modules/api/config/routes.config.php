@@ -9,6 +9,7 @@ return [
       ['uri' => '/hsbc/checking-accounts/account-statement', 'handler' => 'hsbc', 'method' => 'getCheckingAccountStatement', 'cors' => false, 'verifyToken' => false],
     ],
     'post' => [
-        ['uri' => '/login', 'handler' => 'usuarios', 'method' => 'logIn', 'cors' => true, 'verifyToken' => false]
+        ['uri' => '/login', 'handler' => 'usuarios', 'method' => 'logIn', 'cors' => true, 'verifyToken' => false],
+        ['uri' => '/hsbc/transfer', 'handler' => 'hsbc', 'method' => 'transfer', 'cors' => true, 'verifyToken' => false]
     ]
 ];
