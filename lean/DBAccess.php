@@ -257,15 +257,60 @@
 			} catch( \PDOException $e ) {
 				$queryString = '';
 				$queryValues = '';
-				
+
 				if( is_array( $pQuery ) ) {
 					$queryString = $pQuery['query'];
 					$queryValues = ' | ' . implode( ',', $pQuery['bindParams'] );
 				} else {
 					$queryString = $pQuery;
 				}
+				
+				//Get error.
+				$messageOrig = $e->getMessage();
+				$message = strtoupper( $messageOrig );
+				//Get custom messages.
+				$customMessages = $this->lean->getCustomMessages();
+				//Custom message key.
+				$cmKey = null;
+				//Error type.
+				$errorType = null;
 
-				$this->lean->setDBError( $e->getMessage() . ' -> ( ' . $this->idCnn . ' | ' . $queryString . $queryValues . ' )' );
+				//Search custom message.
+				foreach( $customMessages as $keyCM => $valueCM )  { 
+					foreach( $valueCM as $key => $value )  {
+						if( preg_match( '/' . strtoupper( $key ) . '/i', $message ) ) {
+							$errorType = $keyCM;
+							$cmKey = $key;
+							break;
+						}
+					}
+
+					if( $cmKey ) {
+						break;
+					}
+				}
+
+				//Validate primary key for MySQL. MySQL do not register a name for primary
+				if( $this->cnnData['dbType'] === 'MySQL' && !$errorType ) {
+					if( preg_match( "/FOR KEY 'PRIMARY'/i" , $message ) && count( $customMessages['pk'] ) > 0 ) {
+						foreach( $customMessages['pk'] as $key => $value )  {
+							$errorType = 'pk';
+							$cmKey = $key;
+						}
+					} else {
+						$this->lean->setDBError( $messageOrig . ' -> ( ' . $this->idCnn . ' | ' . $queryString . $queryValues . ' )' );
+					}
+				}
+
+				if( $errorType === 'pk' ) {
+					$this->lean->setPKError( $cmKey, 'Duplicate Primary Key (' . $messageOrig . ')' );
+				} else if( $errorType === 'fk' ) {
+					$this->lean->setFKError( $cmKey, $messageOrig );
+				} else if( $errorType === 'uq' ) {
+					$this->lean->setUniqueCError( $cmKey, 'Duplicate Unique Constraint. (' . $messageOrig . ')' );
+				} else {
+					$this->lean->setDBError( $messageOrig . ' -> ( ' . $this->idCnn . ' | ' . $queryString . $queryValues . ' )' );
+				}
 			}
 
 			return $query;
@@ -1185,7 +1230,7 @@
 							}
 
 							//Validamos si está definido este campo.
-							if( !isset( $_insert[ $row->column_name ] ) ) {
+							if( !array_key_exists( $row->column_name, $_insert ) ) {
 								$this->lean->setDevError( $message . 'The "' . $row->column_name . '" property is not defined in the parameters.' );
 							}
 
