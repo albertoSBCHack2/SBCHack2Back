@@ -139,7 +139,7 @@
 
 						if( !self::$cnns[ $this->idCnn ]['oCnn'] )
 						{
-							$this->lean->setConnectionError( 'Failed to connect to database "' . $this->cnnData['db'] . '".' );
+							$this->lean->addConnectionError( 'lean', 'Failed to connect to database "' . $this->cnnData['db'] . '".' );
 						}
 
 						self::$cnns[ $this->idCnn ]['oCnn']->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
@@ -153,7 +153,7 @@
 					}
 					else
 					{
-						$this->lean->setConnectionError( 'Unsupported database engine (' . $this->cnnData['dbType'] . ').' );
+						$this->lean->addConnectionError( 'lean', 'Unsupported database engine (' . $this->cnnData['dbType'] . ').' );
 					}
 				}
 
@@ -162,7 +162,14 @@
 			}
 			catch( \PDOException $e )
 			{
-				$this->lean->setConnectionError( 'Error connecting to database "' . $this->idCnn . '.' . $this->cnnData['db'] . '". (' . utf8_encode( $e->getMessage() ) . ')' );
+				$message = $e->getMessage();
+
+				//Validamos si debemos codificar a utf8.
+				if( strlen( utf8_decode( $message ) ) === strlen( $message ) ) {
+					$message = utf8_encode( $message );
+				}
+
+				$this->lean->addConnectionError( 'lean', 'Error connecting to database "' . $this->idCnn . '.' . $this->cnnData['db'] . '". (' . $message . ')' );
 			}
 		}
 
@@ -220,8 +227,7 @@
 		}
 
 		//Método para ejecutar queries.
-		private function execute( $pQuery, $pIUD = false, $pLog = false, $pObj = true )
-		{
+		private function execute( $pQuery, $pIUD = false, $pLog = false, $pObj = true ) {
 			$this->openConnection();
 
 			try {
@@ -246,7 +252,7 @@
 							$query = self::$cnns[ $this->idCnn ]['stmt']->fetchAll( $pObj ? PDO::FETCH_OBJ : PDO::FETCH_ASSOC );
 					}
 				} else {
-					$this->lean->setDBError( 'There is an error in your SQL statement. Please check your code.' );
+					$this->lean->addDBError( 'lean', 'There is an error in your SQL statement. Please check your script.' );
 				}
 			} catch( \PDOException $e ) {
 				$queryString = '';
@@ -258,53 +264,7 @@
 				} else {
 					$queryString = $pQuery;
 				}
-				
-				//Get error.
-				$messageOrig = $e->getMessage();
-				$message = strtoupper( $messageOrig );
-				//Get custom messages.
-				$customMessages = $this->lean->getCustomMessages();
-				//Custom message key.
-				$cmKey = null;
-				//Error type.
-				$errorType = null;
-
-				//Search custom message.
-				foreach( $customMessages as $keyCM => $valueCM )  { 
-					foreach( $valueCM as $key => $value )  {
-						if( preg_match( '/' . strtoupper( $key ) . '/i', $message ) ) {
-							$errorType = $keyCM;
-							$cmKey = $key;
-							break;
-						}
-					}
-
-					if( $cmKey ) {
-						break;
-					}
-				}
-
-				//Validate primary key for MySQL. MySQL do not register a name for primary
-				if( $this->cnnData['dbType'] === 'MySQL' && !$errorType ) {
-					if( preg_match( "/FOR KEY 'PRIMARY'/i" , $message ) && count( $customMessages['pk'] ) > 0 ) {
-						foreach( $customMessages['pk'] as $key => $value )  {
-							$errorType = 'pk';
-							$cmKey = $key;
-						}
-					} else {
-						$this->lean->setDBError( $messageOrig . ' -> ( ' . $this->idCnn . ' | ' . $queryString . $queryValues . ' )' );
-					}
-				}
-
-				if( $errorType === 'pk' ) {
-					$this->lean->setPKError( $cmKey, 'Duplicate Primary Key (' . $messageOrig . ')' );
-				} else if( $errorType === 'fk' ) {
-					$this->lean->setFKError( $cmKey, $messageOrig );
-				} else if( $errorType === 'uq' ) {
-					$this->lean->setUniqueCError( $cmKey, 'Duplicate Unique Constraint. (' . $messageOrig . ')' );
-				} else {
-					$this->lean->setDBError( $messageOrig . ' -> ( ' . $this->idCnn . ' | ' . $queryString . $queryValues . ' )' );
-				}
+				$this->lean->setDBError( $this->idCnn, $this->tables, $e->getMessage() . ' -> ( ' . $this->idCnn . ' | ' . $queryString . $queryValues . ' )' );
 			}
 
 			return $query;
@@ -355,15 +315,14 @@
 
 			//Validamos si la rutina existe.
 			if( $pTrhowException && count( $querySP ) === 0 ) {
-				$this->lean->setDBError( 'The routine "' . $pSP . '" does not exist in the database "' . $this->idCnn . '.' . $this->cnnData['db'] . '".' );
+				$this->lean->addDBError( 'lean', 'The routine "' . $pSP . '" does not exist in the database "' . $this->idCnn . '.' . $this->cnnData['db'] . '".' );
 			}
 
 			return $sp;
 		}
 
 		//Método para cuando se desea crear un paginado.
-		private function paginate( $pSP, $pSPParams, $pParams, $pIsQManager = false )
-		{ 
+		private function paginate( $pSP, $pSPParams, $pParams, $pIsQManager = false ) {
 			//Validamos que vengan definidos los parámetros correctos.
 			if( !( isset( $pParams['_page'] ) && isset( $pParams['_rows'] )
 				&& isset( $pParams['_slt'] ) ) ) {
@@ -393,7 +352,7 @@
 
 			//Validamos si la rutina trae los comentarios requeridos.
 			if( count( $arrayConsulta ) === 1 ) {
-				$this->lean->setDBError( 'It is necessary to indicate in the routine "' . $pSP . '" the required comment (-- &) in order to be able to page it.' );
+				$this->lean->addDBError( 'lean', 'It is necessary to indicate in the routine "' . $pSP . '" the required comment (-- &) in order to be able to page it.' );
 			}
 
 			//Get "select" and "from".
@@ -421,10 +380,27 @@
 					
 					//Validamos si el valor es un array.
 					if( is_array( $value ) ) {
-						$this->lean->setDevError( 'The value "' . $key . '" must not be an array.' );
+						$count2 = 1;
+						$total2 = $total = count( $value );
+
+						foreach( $value as $key2 => $value2 ) {
+							$currentValue = trim( $value2 );
+
+							if( $this->cnnData['dbType'] === 'PostgreSQL' ) {
+								$currentValueArray = explode( '::', $value2 );
+								$currentValue = trim( $currentValueArray[0] );
+								$currentValueExtra = count( $currentValueArray ) === 1 ? '' : trim( $currentValueArray[1] );
+							}
+
+							//Obtenemos el parámetro actual.
+							$paramsArr = $this->getCurrentParam( $pParams, $currentValue, $currentValueExtra, $spPrefix, $pSP );
+							//Reemplazamos.
+							$fromWhere = str_replace( $currentValue, ':' . $currentValue . $paramsArr['cast'], $fromWhere );
+							$sqlValuesArr['bindParams'][$currentValue] = $paramsArr['value'];
+						}
 					} else {
 						$currentValue = trim( $value );
-						
+
 						if( $this->cnnData['dbType'] === 'PostgreSQL' ) {
 							$currentValueArray = explode( '::', $value );
 							$currentValue = trim( $currentValueArray[0] );
@@ -439,10 +415,12 @@
 						if( $this->cnnData['dbType'] === 'SQLServer' ) {
 							$currentValueAux = '@' . $currentValue;
 							$fromWhereArr = explode( $currentValueAux, $fromWhere );
-							$fromWhereArrCount = sizeof( $fromWhereArr );
+							 
+							// var_dump( $fromWhereArr );
+							 //die();
 
-							if( $fromWhereArrCount > 0 ) {
-								for( $x=0; $x<$fromWhereArrCount - 2; $x++ ) {
+							if( count( $fromWhereArr ) > 0 ) {
+								for( $x=0; $x<count( $fromWhereArr ) - 2; $x++ ) {
 									$newParam = 'parameterNameChange' . rand(0,1000000);
 									$fromWhere = preg_replace( '/' . preg_quote( $currentValueAux, '/' ) . '/', $newParam, $fromWhere, 1 );
 									//Reemplazamos.
@@ -458,20 +436,9 @@
 							//Quitamos el arrova de los parámetros.
 							$fromWhere = str_replace( '@:', ':', $fromWhere );
 						} else {
-							//Validar que exista el parámetro.
-							$paramCount = sizeof( explode( $currentValue, $fromWhere ) ) - 1;
-
-							if( $paramCount > 0 ) {
-								//Reemplazamos.
-								$bindParameter = ':' . $currentValue;
-								$fromWhere = str_replace( $currentValue, $bindParameter . $paramsArr['cast'], $fromWhere );
-								$sqlValuesArr['bindParams'][$currentValue] = $paramsArr['value'];
-
-								//Quitamos las dobles comillas en caso de ser PostgreSQL.
-								if( $this->cnnData['dbType'] === 'PostgreSQL' ) {
-									$fromWhere = str_replace( '"' . $bindParameter . '"', $bindParameter, $fromWhere );
-								}
-							}
+							//Reemplazamos.
+							$fromWhere = str_replace( $currentValue, ':' . $currentValue . $paramsArr['cast'], $fromWhere );
+							$sqlValuesArr['bindParams'][$currentValue] = $paramsArr['value'];
 						}
 					}
 				}
@@ -540,15 +507,15 @@
 					FROM(
 						' . $select . ' ' .
 						$fromWhere . '
-						ORDER BY ' . $pParams['_orderBy'] . 
-						(
-							$this->cnnData['dbType'] === 'MySQL'
-								?
-									' LIMIT ' . $start . ', ' . $rows
-								:
-									' LIMIT ' . $rows . ' OFFSET ' . $start
-						) . ' 
-					) tmp';
+					) tmp
+					ORDER BY ' . $pParams['_orderBy'] .
+					(
+						$this->cnnData['dbType'] === 'MySQL'
+							?
+								' LIMIT ' . $start . ', ' . $rows
+							:
+								' LIMIT ' . $rows . ' OFFSET ' . $start
+					);
 			}
 
 			if( isset( $pParams['_showExec'] ) && $pParams['_showExec'] ) {
@@ -568,6 +535,12 @@
 				'pages' => $totalPages * 1,
 				'totalRows' => $totalRows * 1
 			);
+		}
+
+		//Método para sanitizar parámetros.
+		private function sanitizeValue( $pValue )
+		{
+			return $pValue;
 		}
 
 		//Método para ejecutar los sp.
@@ -804,8 +777,280 @@
 			}
 			else
 			{
-				$this->lean->setDevError( 'Be sure to set the correct parameters for the "exec" method.' );
+				$query = $this->qManager( $pSP );
+
+				//Validamos si el query es para un paginado.
+				if( isset( $pSP['_paginate'] ) && $pSP['_paginate'] ) {
+					return $this->paginate( $query, null, $pSP, true );
+				}
+
+				return $this->execute( $query, false, true, false );
 			}
+		}
+
+		//Función para crear la consulta en código duro.
+		private function qManager( $pParams )
+		{
+			$query = '';
+			$queryAux = '';
+			$wao = '';
+			$waoField = '';
+			$where = false;
+			$parenthO = '';
+			$parenthC = '';
+			$bindParams = array();
+
+			//Armamos el query.
+			for( $x=0; $x<count($this->queryArray); $x++ )
+			{
+				$type = trim( $this->queryArray[$x]['type'] );
+				$value = is_array( $this->queryArray[$x]['value'] ) ?
+				$this->queryArray[$x]['value'] : trim( $this->queryArray[$x]['value'] );
+
+				switch( $type )
+				{
+					case 'SELECT':
+						if( isset( $pParams['_paginate'] ) && $pParams['_paginate'] )
+							$query .= ' -- & ';
+
+						$query .= 'SELECT ' . $value;
+
+						break;
+
+					case 'FROM':
+						if( isset( $pParams['_paginate'] ) && $pParams['_paginate'] )
+							$query .= ' -- & ';
+
+						$query .= ' FROM ' . $value;
+
+						break;
+
+					case 'WHERE':
+					case 'AND':
+					case 'OR':
+						$wao = $type;
+						$waoField = $value;
+
+						break;
+
+					case '(':
+						$parenthO = '(';
+
+						break;
+					case ')':
+						$parenthC = ')';
+
+						if( $x == count($this->queryArray) - 1 )
+						{
+							if( isset( $pParams['_paginate'] ) && $pParams['_paginate'] )
+								$query .= ' -- & ';
+						}
+
+						break;
+
+					case '=':
+					case '!=':
+					case '>':
+					case '<':
+					case '>=':
+					case '<=':
+						//Validamos si debemos cerrar algún paréntesis.
+						if( $parenthC )
+						{
+							$query .= ' )';
+							$parenthC = '';
+						}
+
+						if( $wao == 'AND' && !$where )
+							$wao = 'WHERE';
+
+						if( $wao && isset( $pParams[ $value ] ) )
+						{
+							$query .= ' ' . $wao . ( $parenthO ? ' ' . $parenthO : '' ) . ' ' . $waoField . ' ' . $type . ' :' . $value;
+							$bindParams[ $value ] = $pParams[ $value ];
+
+							if( $wao == 'WHERE' )
+								$where = true;
+						}
+
+						$wao = '';
+						$waoField = '';
+						$parenthO = '';
+
+						if( $x == count($this->queryArray) - 1 )
+						{
+							if( isset( $pParams['_paginate'] ) && $pParams['_paginate'] )
+								$query .= ' -- & ';
+						}
+
+						break;
+
+					case 'IN':
+					case 'NOT IN':
+						//Validamos si debemos cerrar algún paréntesis.
+						if( $parenthC )
+						{
+							$query .= ' )';
+							$parenthC = '';
+						}
+
+						if( $wao == 'AND' && !$where )
+							$wao = 'WHERE';
+
+						if( $wao && isset( $pParams[ $value ] ) )
+						{
+							$query .= ' ' . $wao . ( $parenthO ? ' ' . $parenthO : '' ) . ' ' . $waoField . ' ' . $type . '(' . $pParams[ $value ] . ')';
+							$bindParams[ $value ] = $pParams[ $value ];
+
+							if( $wao == 'WHERE' )
+								$where = true;
+						}
+
+						$wao = '';
+						$waoField = '';
+						$parenthO = '';
+
+						break;
+
+					case 'LIKE':
+					case 'ILIKE':
+						//Validamos si debemos cerrar algún paréntesis.
+						if( $parenthC )
+						{
+							$query .= ' )';
+							$parenthC = '';
+						}
+
+						if( $wao == 'AND' && !$where )
+							$wao = 'WHERE';
+
+						//Quitamos los '%' para buscar el campo por el cual hay que filtrar.
+						$valueArray = explode( '%', $value );
+						$value = '';
+						for( $y=0; $y<count($valueArray); $y++ )
+						{
+							//Si es diferente de vacío siginifica que es el campo que andamos buscando.
+							if( trim( $valueArray[$y] ) != '' )
+							{
+								$value = $valueArray[$y];
+								break;
+							}
+						}
+
+						if( $wao && isset( $pParams[$value] ) )
+						{
+							$queryAux = '';
+
+							//Concatenamos el valor junto con los '%'.
+							for( $y=0; $y<count($valueArray); $y++ )
+							{
+								if( trim( $valueArray[$y] ) == '' )
+									$queryAux .= '%';
+								else
+									$queryAux .= $pParams[$value];
+							}
+
+							$query .= ' ' . $wao . ( $parenthO ? ' ' . $parenthO : '' ) . ' ' . $waoField . ' ' . $type .  " '" . $queryAux . "' ";
+
+							if( $wao == 'WHERE' )
+								$where = true;
+						}
+
+						$wao = '';
+						$waoField = '';
+						$parenthO = '';
+
+						if( $x == count($this->queryArray) - 1 )
+						{
+							if( isset( $pParams['_paginate'] ) && $pParams['_paginate'] )
+								$query .= ' -- & ';
+						}
+
+						break;
+
+					case 'BETWEEN':
+						//Validamos si debemos cerrar algún paréntesis.
+						if( $parenthC )
+						{
+							$query .= ' )';
+							$parenthC = '';
+						}
+
+						if( $wao == 'AND' && !$where )
+							$wao = 'WHERE';
+
+						if( $wao && isset( $pParams[ $value[0] ] ) && isset( $pParams[ $value[1] ] ) )
+						{
+							$query .= ' ' . $wao . ( $parenthO ? ' ' . $parenthO : '' ) . ' '
+								. $waoField . ' ' . $type . ' '
+								. ':' . $value[0] . ' AND '
+								. ':' . $value[1];
+							$bindParams[ $value[0] ] = $pParams[ $value[0] ];
+							$bindParams[ $value[1] ] = $pParams[ $value[1] ];
+
+							if( $wao == 'WHERE' )
+								$where = true;
+						}
+
+						$wao = '';
+						$waoField = '';
+						$parenthO = '';
+
+						if( $x == count($this->queryArray) - 1 )
+						{
+							if( isset( $pParams['_paginate'] ) && $pParams['_paginate'] )
+								$query .= ' -- & ';
+						}
+
+						break;
+
+					case 'GROUP BY':
+					case 'LIMIT':
+						//Validamos si debemos cerrar algún paréntesis.
+						if( $parenthC )
+						{
+							$query .= ' )';
+							$parenthC = '';
+						}
+
+						$query .= ' ' . $type . ' ' . $value;
+
+						if( $x == count($this->queryArray) - 1 )
+						{
+							if( isset( $pParams['_paginate'] ) && $pParams['_paginate'] )
+								$query .= ' -- & ';
+						}
+
+						break;
+
+					case 'ORDER BY':
+						//Validamos si debemos cerrar algún paréntesis.
+						if( $parenthC )
+						{
+							$query .= ' )';
+							$parenthC = '';
+						}
+
+						$query .= ' ' . $type . ' ' . $value;
+
+						break;
+
+					default:
+						break;
+				}
+			}
+
+			//Valida if the "query" is correct.
+			if( !$query )
+				$this->oLM->addDevError( 'lean', 'Be sure to set the correct parameters for the "exec" method.' );
+
+			if( ( isset( $pParams['_showExec'] ) && $pParams['_showExec'] ) && ( isset( $pParams['_paginate'] ) && !$pParams['_paginate'] ) )
+				die( $query );
+
+			return [
+				'query' => $query,
+				'bindParams' => $bindParams
+			];
 		}
 
 		//Método para hacer un insert.
@@ -1344,32 +1589,26 @@
 		}
 
 		//Método para hacer commit.
-		public static function commit( $pIdCnn = null ) {
-			try {
-				$cnns = $pIdCnn ? array( self::$cnns[ $pIdCnn ] ) : self::$cnns;
+		public static function commit( $pIdCnn = null )
+		{
+			$cnns = $pIdCnn ? array( self::$cnns[ $pIdCnn ] ) : self::$cnns;
 
-				foreach( $cnns as $cnn )
-				{
-					if( isset( $cnn['oCnn'] ) && $cnn['oCnn']->inTransaction() )
-						$cnn['oCnn']->commit();
-				}
-			} catch( \PDOException $e ) {
-				Lean::getInstance()->setConnectionError( 'Error on commit. (' . $e->getMessage() . ')' );
+			foreach( $cnns as $cnn )
+			{
+				if( isset( $cnn['oCnn'] ) && $cnn['oCnn']->inTransaction() )
+					$cnn['oCnn']->commit();
 			}
 		}
 
 		//Método para hacer rollBack.
-		public static function rollBack( $pIdCnn = null ) {
-			try {
-				$cnns = $pIdCnn ? array( self::$cnns[ $pIdCnn ] ) : self::$cnns;
+		public static function rollBack( $pIdCnn = null )
+		{
+			$cnns = $pIdCnn ? array( self::$cnns[ $pIdCnn ] ) : self::$cnns;
 
-				foreach( $cnns as $cnn )
-				{
-					if( isset( $cnn['oCnn'] ) && $cnn['oCnn']->inTransaction() )
-						$cnn['oCnn']->rollBack();
-				}
-			} catch( \PDOException $e ) {
-				Lean::getInstance()->setConnectionError( 'Error on rollback. (' . $e->getMessage() . ')' );
+			foreach( $cnns as $cnn )
+			{
+				if( isset( $cnn['oCnn'] ) && $cnn['oCnn']->inTransaction() )
+					$cnn['oCnn']->rollBack();
 			}
 		}
 
@@ -1390,7 +1629,7 @@
 					$cnn['stmt'] = null;
 				}
 			} catch( \PDOException $e ) {
-				Lean::getInstance()->setConnectionError( 'Error closing database connections. (' . $e->getMessage() . ')' );
+				$this->lean->addConnectionError( 'lean', 'Error closing database connections. (' . $e->getMessage() . ')' );
 			}
 		}
 

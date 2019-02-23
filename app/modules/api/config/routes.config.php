@@ -5,6 +5,6 @@ return [
       ['uri' => '/banregio-callback-token', 'handler' => 'api', 'method' => 'obtenerToken', 'cors' => false, 'verifyToken' => false],
     ],
     'post' => [
-
+        ['uri' => '/login', 'handler' => 'usuarios', 'method' => 'logIn', 'cors' => true, 'verifyToken' => false]
     ]
 ];
