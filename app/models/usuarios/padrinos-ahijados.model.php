@@ -1,8 +1,12 @@
 <?php
     class PadrinosAhijadosModel extends BaseModel {
-        //Método para obtener las cuentas de los usuarios.
-        public function obtener( $params ) {
-            return $this->connection->exec('padrinos_ahijados_obtener', $params);
+        //Método para obtener los padrinos.
+        public function obtenerPadrinos( $params ) {
+            return $this->connection->exec('padrinos_ahijados_obtener_padrinos', $params);
+        }
+        //Método para obtener los ahijados.
+        public function obtenerAhijados( $params ) {
+            return $this->connection->exec('padrinos_ahijados_obtener_ahijados', $params);
         }
 
          //Método para agregar padrinos y/o ahijados.

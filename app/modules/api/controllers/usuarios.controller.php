@@ -28,6 +28,13 @@
             ];
             return $this->getDomain('usuarios', 'padrinos')->obtener( $params );
         }
+        //Método para obtener los ahijados del usuario enviado
+        public function getGodSons( $request ) {
+            $params = [
+                'idUsuario' => $request->getParams('idUser')
+            ];
+            return $this->getDomain('usuarios', 'ahijados')->obtener( $params );
+        }
 
         //Métodos para agregar ahijados.
         public function agregarAhijado( $request ) {

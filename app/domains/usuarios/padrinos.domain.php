@@ -3,7 +3,7 @@
 
         //Método para obtener las padrinos de los ahorradores.
         public function obtener( $params ) {
-            return $this->getModel('usuarios', 'padrinos-ahijados')->obtener( $params );
+            return $this->getModel('usuarios', 'padrinos-ahijados')->obtenerPadrinos( $params );
         }
 
         //Método para agregar padrinos.
