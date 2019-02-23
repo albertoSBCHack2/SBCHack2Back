@@ -21,7 +21,7 @@
 
         //Método para obtener las cuentas de los usuarios.
         public function getAccounts( $params ) {
-            return $this->getModel('usuarios', 'usuarios')->getAccounts( $params )[0] ?? null;
+            return $this->getModel('usuarios', 'usuarios')->getAccounts( $params );
         }
     }
 ?>
