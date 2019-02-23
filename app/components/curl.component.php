@@ -63,6 +63,7 @@
 
             $response = curl_exec( $this->oCurl );
             curl_close( $this->oCurl );
+            
             return $response;
         }
     }
