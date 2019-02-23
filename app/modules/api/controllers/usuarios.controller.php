@@ -21,12 +21,11 @@
 
             return $this->getDomain('usuarios', 'usuarios')->getAccounts( $params );
         }
-
+        //Método para obtener los padrinos del usuario enviado
         public function getGodFathers( $request ) {
             $params = [
                 'idUsuario' => $request->getParams('idUser')
             ];
-
             return $this->getDomain('usuarios', 'padrinos')->obtener( $params );
         }
     }
