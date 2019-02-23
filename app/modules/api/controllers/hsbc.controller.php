@@ -1,15 +1,12 @@
 <?php
-    class HSBCController extends BaseController {
+    class HsbcController extends BaseController {       
          //Método para obtener el profile del cliente.
          public function getProfileClient( $request ) {
-             $params = [
-                'clientNumber' => $this->getParam('clientNumber')
-             ];
-
-            $oCurl = new CurlComponent([
-                'url' => $banregioConfig['banregioBaseUrl'].'/oauth/token/'
-            ]);
-            $response = $oCurl->post( http_build_query($body) );
+            $params = [
+                'clientNumber' => $request->getParams('clientNumber')
+            ];
+        
+            return $this->getDomain('api', 'hsbc')->getProfileClient( $params );
          }
     }
 ?>
