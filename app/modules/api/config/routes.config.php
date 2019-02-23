@@ -11,6 +11,7 @@ return [
       ['uri' => '/fin-lab/bank/{accountNumber}/balances', 'handler' => 'fin-lab', 'method' => 'getBalanceByAccount', 'cors' => false, 'verifyToken' => false],
       ['uri' => '/fin-lab/bank/{accountNumber}/transactions', 'handler' => 'fin-lab', 'method' => 'getTransactions', 'cors' => false, 'verifyToken' => false],
       ['uri' => '/users/{idUser}/godfathers', 'handler' => 'usuarios', 'method' => 'getGodFathers', 'cors' => false, 'verifyToken' => false],
+      ['uri' => '/users/{idUser}/accounts', 'handler' => 'usuarios', 'method' => 'getAccounts', 'cors' => false, 'verifyToken' => false],
     ],
     'post' => [
         ['uri' => '/login', 'handler' => 'usuarios', 'method' => 'logIn', 'cors' => true, 'verifyToken' => false],
