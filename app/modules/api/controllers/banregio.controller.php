@@ -26,7 +26,8 @@
               $this->setError('No se encontró token');
             }
             $params = [
-                'token' =>$token['access_token']
+                'token' =>$token['access_token'],
+                'refreshToken' =>$token['refresh_token']
             ];
             return BanregioApiComponent::consultaCuentas($params);
         }

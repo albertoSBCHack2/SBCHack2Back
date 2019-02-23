@@ -26,67 +26,79 @@
             if (isset($params['idCuenta'])) {
               $uri.=$params['idCuenta'];
             }
-            // var_dump(self::$headerString);  die();
-            // $header = str_replace( '{token}', $params['token'], $this->$headerString )
+
+            $header = [
+              'Authorization: Bearer '.$params['token']
+            ];
+
             $oCurl = new CurlComponent([
                 'url' => $banregioConfig['banregioBaseUrl'].'/v1/accounts',
                 'headers' => [
-                    str_replace( '{token}', $params['token'], self::$headerString )
-                ]
+                  str_replace( '{token}', $params['token'], self::$headerString )
+                ],
+                'followLocation' => 1
             ]);
-            var_dump($oCurl->get());  die();
-            // $response = json_decode();
+            $response = json_decode($oCurl->get());
             if ($response->error) {
-                $tokenData = $this->refrescarToken();
+                $tokenData = self::refrescarToken($params);
                 $retryParams = [
                     'idCuenta' => $params['idCuenta'],
                     'token' => $tokenData['access_token'],
                 ];
-                $this->consultaTransacciones($retryParams);
+                self::consultaTransacciones($retryParams);
             }
             return $response;
         }
 
         public static function consultaTransacciones( $params ) {
+            $lean = Lean::getInstance();
+            $banregioConfig = $lean->getConfig('banregioData');
+
+            $header = [
+              'Authorization: Bearer '.$params['token']
+            ];
 
             $oCurl = new CurlComponent([
                 'url' => $banregioConfig['banregioBaseUrl'].'/v1/accounts/'.$params['idCuenta'].'/transactions',
                 'headers' => [
-                    str_replace( '{token}', $params['token'], $headerString )
-                ]
+                  str_replace( '{token}', $params['token'], self::$headerString )
+                ],
+                'followLocation' => 1
             ]);
-            $response = json_decode($oCurl->post( http_build_query($body) ));
+            $response = json_decode($oCurl->get());
             if ($response->error) {
-                $tokenData = $this->refrescarToken();
+                $tokenData = self::refrescarToken($params);
                 $retryParams = [
                     'idCuenta' => $params['idCuenta'],
                     'token' => $tokenData['access_token'],
                 ];
-                $this->consultaTransacciones($retryParams);
+                self::consultaTransacciones($retryParams);
             }
             return $response;
+
         }
 
-        private static function refrescarToken( $params ) {
+        private static function refrescarToken($params) {
             $lean = Lean::getInstance();
             $banregioConfig = $lean->getConfig('banregioData');
             $body = [
-                'grant_type' => $banregioConfig['authorizationCode'],
-                'code' => $request->getQuery('code'),
+                'grant_type' => $banregioConfig['refreshToken'],
+                'refresh_token' => $params['refreshToken'],
                 'client_id' => $banregioConfig['clientID'],
                 'client_secret' => $banregioConfig['clientSecret'],
-                'redirect_uri' =>  $this->getConfig('urlBase').$banregioConfig['redirectUri']
+                'redirect_uri' =>  $lean->getConfig('urlBase').$banregioConfig['redirectUri']
             ];
 
             $oCurl = new CurlComponent([
                 'url' => $banregioConfig['banregioBaseUrl'].'/oauth/token/'
             ]);
             $tokenData = json_decode($oCurl->post( http_build_query($body) ));
+            var_dump($body);  die();
             $paramsToken = [
                 'access_token' => $tokenData->access_token,
                 'refresh_token' => $tokenData->refresh_token,
             ];
-            $this->getModel('banregio', 'banregio-token')->guardar( $params );
+            $lean->getModel('banregio', 'banregio-token')->guardar( $paramsToken );
             return $paramsToken;
         }
 

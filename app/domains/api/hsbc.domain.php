@@ -57,21 +57,5 @@
 
             return $responseJSON['accountBalance'];
         }
-
-        //Método para obtener el balance por número de cuenta.
-        public function getBalanceByAccount( $params ) {
-            $oCurl = new CurlComponent([
-                'url' => $this->baseURL . '/v1/sandbox/checking-accounts/balance?accountNumber=' . $params['accountNumber'],
-                'headers' => $this->headers
-            ]);
-            $response = $oCurl->get();
-            $responseJSON = json_decode( $response, true );
-
-            if( !isset( $responseJSON['accountBalance'] ) ) {
-                $this->setError('Cuenta no existe.');
-            }
-
-            return $responseJSON['accountBalance'];
-        }
     }
 ?>

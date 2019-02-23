@@ -1,5 +1,5 @@
 <?php
-    class banregioTokenModel extends BaseModel {
+    class BanregioTokenModel extends BaseModel {
         public function guardar( $params ) {
           return $this->connection->insert('banregio_token', [
               '_insert' => $params
