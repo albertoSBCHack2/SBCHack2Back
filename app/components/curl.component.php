@@ -31,15 +31,16 @@
             if( isset( $this->config['sslVerifyHost'] ) ) {
                 curl_setopt( $this->oCurl, CURLOPT_SSL_VERIFYHOST, $this->config['sslVerifyHost'] );
             }
+
+            if( isset( $this->config['header'] ) ) {
+                curl_setopt( $this->oCurl, CURLOPT_HEADER, $this->config['header'] );
+            }
         }
 
         //GET
         public function get() {
             //Seteamos el curl.
             $this->init();
-
-            curl_setopt( $this->oCurl, CURLOPT_POST, true );
-
             $response = curl_exec( $this->oCurl );
             curl_close( $this->oCurl );
 

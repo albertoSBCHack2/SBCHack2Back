@@ -3,7 +3,7 @@
         //Método para login.
         public function logIn( $request ) {
             $params = [
-                'nom_usuario' => $request->getBody('nom_usuario'),
+                'nomUsuario' => $request->getBody('nomUsuario'),
                 'contrasena' => $request->getBody('contrasena')
             ];
 
