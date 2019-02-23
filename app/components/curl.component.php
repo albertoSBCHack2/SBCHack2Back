@@ -35,6 +35,10 @@
             if( isset( $this->config['header'] ) ) {
                 curl_setopt( $this->oCurl, CURLOPT_HEADER, $this->config['header'] );
             }
+
+            if( isset( $this->config['followLocation'] ) ) {
+                curl_setopt( $this->oCurl, CURLOPT_FOLLOWLOCATION, $this->config['followLocation'] );
+            }
         }
 
         //GET

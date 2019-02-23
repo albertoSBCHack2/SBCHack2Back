@@ -62,7 +62,7 @@
         //Método para obtener los movimientos.
         public function getCheckingAccountStatement( $params ) {
             $oCurl = new CurlComponent([
-                'url' => $this->baseURL . '/v1/sandbox/checking-accounts/account-statement' . 
+                'url' => $this->baseURL . '/v1/sandbox/checking-accounts/account-statement' .
                     '?accountNumber=' . $params['accountNumber'] .
                     '&movementsNumber=' . $params['movementsNumber'],
                 'headers' => $this->headers
