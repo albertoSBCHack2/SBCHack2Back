@@ -46,7 +46,7 @@
             ]);
 
             //Calculamos el total a transferir.
-            $totalTransferir = $reto['monto'] * count( $ahijados ) + $reto['bono'];
+            $totalTransferir = $params['monto'] * count( $ahijados ) + $params['bono'];
 
             //Guardamos el reto.
             $idReto = $this->getModel('usuarios', 'retos')->agregar([
