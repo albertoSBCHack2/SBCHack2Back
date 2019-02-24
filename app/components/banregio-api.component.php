@@ -40,7 +40,7 @@
                 'access_token' => $tokenData->access_token,
                 'refresh_token' => $tokenData->refresh_token,
             ];
-            $lean->getModel('banregio', 'banregio-token')->guardar( $paramsToken );
+            $lean->getDomain('api', 'banregio-token')->guardarToken( $paramsToken );
             return $paramsToken;
         }
 
