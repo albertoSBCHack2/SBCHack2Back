@@ -28,7 +28,7 @@
         public function agregarReto( $params ) {
             //Obtenemos la fecha de caducidad del reto.
             $fecCaducidad = date('Y-m-d H:i:s');
-            $fecCaducidad = date( 'Y-m-d', strtotime( $fecCaducidad. ' + ' . $diasDelReto . ' days' ) );
+            $fecCaducidad = date( 'Y-m-d', strtotime( $fecCaducidad. ' + ' . $params['diasDelReto'] . ' days' ) );
 
             //Validamos que no exista un reto pendiente.
             $retoPendiente = $this->getModel('usuarios', 'retos')->obtenerPorPadrino([
@@ -43,7 +43,7 @@
             //Guardamos el reto.
             $idReto = $this->getModel('usuarios', 'retos')->agregar([
                 'id_usuario_padrino_reta' => $params['idUsuarioPadrino'],
-                'id_banco' => $params['idBanco'],
+                'id_cuenta' => $params['idCuenta'],
                 'monto' => $params['monto'],
                 'bono' => $params['bono'],
                 'vigente' => true,
@@ -60,8 +60,11 @@
 
         //Método para hacer transferencias.
         public function transfer( $params ) {
+            //Primeramente hacemos la transferencia.
+            $transfer1 = $this->getDomain('api', 'hsbc')->transfer( $params );
+
             //Validamos si es ahijado y si tiene un reto vigente.
-            if( $params['idRol'] == 2 ) {
+            if( $params['idRol'] == 2 && $params['transactionAmount'] > 0 ) {
                 $reto = $this->getModel('usuarios', 'retos')->obtenerPorAhijado([
                     'idUsuario' => $params['idUsuario'],
                     'vigente' => true
@@ -84,11 +87,35 @@
                     ]);
 
                     //Validamos si cumple con el reto.
-                    if( $reto['vigente'] ) {
-                        //Se ha cumplido el reto.
+                    if( $reto['vigente'] ) { //Se ha cumplido el reto. 
                         //Hacemos la transferencia al ahijado.
                         if( $params['idBanco'] == 1 ) {
-                            
+                            //Consultamos la información de esta cuenta.
+                            $cuentaAhijado = $this->getModel('usuarios', 'usuarios')->getAccounts([
+                                'numCuenta' => $params['transactionAmount']
+                            ]);
+
+                            //Consultamos los ahijados del padrino.
+                            $ahijados = $this->getModel('usuarios', 'padrinos-ahijados')->obtenerAhijados([
+                                'idUsuario' => $reto['idUsuarioPadrinoReta']
+                            ]);
+
+                            //Consultamos la cuenta del padrino.
+                            $cuentaPadrino = $this->getModel('usuarios', 'usuarios')->getAccounts([
+                                'idUsuario' => $reto['idUsuarioPadrinoReta'],
+                                'idCuenta' => $reto['idCuenta']
+                            ])[0];
+
+                            //Calculamos el total a transferir.
+                            $totalTransferir = $reto['monto'] * count( $ahijados ) + $reto['bono'];
+
+
+                            $transfer2 = $this->getDomain('api', 'hsbc')->transfer([
+                                'sourceAccount' => $cuentaPadrino['numCuenta'],
+                                'destinationAccount' => $params['transactionAmount'],
+                                'transactionAmount' => $totalTransferir,
+                                'description' => 'Ganaste el reto',
+                            ]);
                         }
                     }
                 }

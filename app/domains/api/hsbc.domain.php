@@ -96,7 +96,7 @@
             $responseJSON = json_decode( $response, true );
 
             if( !isset( $responseJSON['transferResponse'] ) ) {
-                $this->setError('Hubo un problema al generar la tranfserencia con HSBC.');
+                $this->setError('Hubo un problema al generar la transferencia con HSBC.');
             }
 
             return $responseJSON['transferResponse'];
