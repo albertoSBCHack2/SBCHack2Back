@@ -18,7 +18,7 @@
                 'idUsuario' => $request->getTokenData('idUsuario'),
                 'idBanco' => $request->getQuery('idBanco')
             ];
-
+var_dump($params); die();
             return $this->getDomain('usuarios', 'usuarios')->getAccounts( $params );
         }
         //Método para obtener los padrinos del usuario enviado
