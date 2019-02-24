@@ -60,7 +60,6 @@
         public function agregarReto( $requesst ) {
             $params = [
                 'idUsuarioPadrino' => $request->getTokenData('idUsuario'),
-                'idUsuarioAhijado' => $request->getBody('idUsuarioAhijado'),
                 'idBanco' => $request->getBody('idBanco'),
                 'diasDelReto' => $request->getBody('diasDelReto'),
                 'monto' => $request->getBody('monto'),
@@ -82,5 +81,19 @@
                 return $this->getDomain('usuarios', 'ahijados')->getRetos( $params );
             }
         }
+
+        //Método para hacer transferencias.
+        public function transfer( $request ) {
+            $params = [
+                'sourceAccount' => $request->getBody('sourceAccount'),
+                'destinationAccount' => $request->getBody('destinationAccount'),
+                'transactionAmount' => $request->getBody('transactionAmount'),
+                'description' => $request->getBody('description'),
+                'idUsuario' => $request->getTokenData('idUsuario'),
+                'idRol' => $request->getTokenData('idRol')
+            ];
+ 
+            return $this->getDomain('usuarios', 'usuarios')->transfer( $params );
+         }
     }
 ?>

@@ -125,6 +125,10 @@
                     //Validamos si cumple con el reto.
                     if( $reto['vigente'] ) {
                         //Se ha cumplido el reto.
+                        //Hacemos la transferencia al ahijado.
+                        if( $params['idBanco'] == 1 ) {
+                            
+                        }
                     }
                 }
             }
