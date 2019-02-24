@@ -99,7 +99,7 @@
             // }
 
             // $response = $responseJSON['MT_Level2AccountCreationResp_sync']['Level2AccountCreationDataResponse'];
-var_dump( $params ); die()<            
+         
             //Ligamos esta cuenta con el usuario.
             $this->getModel('usuarios', 'cuentas')->agregar([
                 'id_usuario' => $params['idUsuario'],
