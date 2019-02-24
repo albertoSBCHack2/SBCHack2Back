@@ -19,7 +19,7 @@
             if( isset( $params['contrasena'] ) ) {
                 $params['contrasena'] = hash( 'sha256', $params['contrasena'] ); 
             }
- 
+ var_dump( $params ); die();
             return $this->connection
                 ->select('id_usuario AS "idUsuario", id_cuenta AS "idCuenta", id_banco AS "idBanco", num_cuenta AS "numCuenta"')
                 ->from('cuentas')
