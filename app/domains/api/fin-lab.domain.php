@@ -93,7 +93,7 @@
             ]);
             $response = $oCurl->post( json_encode( $accountParams ) );
             $responseJSON = json_decode( $response, true );
- return $responseJSON;
+ 
             if( !( isset( $responseJSON['data'] ) && isset( $responseJSON['data']['MT_Level2AccountCreationResp_sync'] ) ) ) {
                 $this->setError('El folio ingresado ya fue utilizado.');
             }
