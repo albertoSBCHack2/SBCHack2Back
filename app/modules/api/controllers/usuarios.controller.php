@@ -57,7 +57,7 @@
         }
 
         //Método para agergar retos.
-        public function agregarReto( $requesst ) {
+        public function agregarReto( $request ) {
             $params = [
                 'idUsuarioPadrino' => $request->getTokenData('idUsuario'),
                 'idBanco' => $request->getBody('idBanco'),

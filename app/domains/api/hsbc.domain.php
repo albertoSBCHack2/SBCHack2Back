@@ -99,40 +99,6 @@
                 $this->setError('Hubo un problema al generar la tranfserencia con HSBC.');
             }
 
-            //Validamos si es ahijado y si tiene un reto vigente.
-            if( $params['idRol'] == 2 ) {
-                $reto = $this->getModel('usuarios', 'retos')->obtenerPorAhijado([
-                    'idUsuario' => $params['idUsuario'],
-                    'vigente' => true
-                ])[0] ?? null;
-
-                if( $reto ) {
-                    //Quitamos las cuentas de ahorro.
-                    $this->getModel('usuarios', 'cuentas')->actualizar([
-                        'es_ahorro' => false
-                    ], [
-                        'id_usuario' => $params['idUsuario'],
-                        'es_ahorro' => true
-                    ]);
-
-                    //Marcamos que esta cuenta es la de ahorro.
-                    $this->getModel('usuarios', 'cuentas')->actualizar([
-                        'es_ahorro' => true
-                    ], [
-                        'num_cuenta' => $params['transactionAmount']
-                    ]);
-
-                    //Validamos si cumple con el reto.
-                    if( $reto['vigente'] ) {
-                        //Se ha cumplido el reto.
-                        //Hacemos la transferencia al ahijado.
-                        if( $params['idBanco'] == 1 ) {
-                            
-                        }
-                    }
-                }
-            }
-
             return $responseJSON['transferResponse'];
         }
     }
