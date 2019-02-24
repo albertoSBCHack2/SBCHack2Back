@@ -60,7 +60,13 @@
                 'fec_registro' => date('Y-m-d H:i:s')
             ]);
 
-            //Avisamos al ahijado por medio de una push notification.
+            //Avisamos a los ahijados por medio de una push notification.
+            foreach( $ahijados as $ahijado ) {
+                $this->getModel('usuarios', 'push-notification')->agregar([
+                    'id_usuario' => $ahijado['idUsuario'],
+                    'mensaje' => 'Tu padrino ' . $params['nombrePadrino'] . ' te ha asignado un nuevo reto.'
+                ]);
+            }
 
             return [
                 'idReto' => $idReto
@@ -128,6 +134,20 @@
                     }
                 }
             }
+        }
+
+        //Método para obtener las push notifications por usuario.
+        public function getPushNotifications( $params ) {
+            $pushNotification = $this->getModel('usuarios', 'push-notification')->obtener( $params )[0] ?? null;
+
+            //La inactivamos.
+            $this->getModel('usuarios', 'push-notification')->actualizar([
+                'activa' => false
+            ], [
+                'id_push_notification' => $pushNotification['idPushNotification']
+            ]);
+
+            return $pushNotification;
         }
     }
 ?>

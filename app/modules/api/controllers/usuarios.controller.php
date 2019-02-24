@@ -95,6 +95,16 @@
             ];
  
             return $this->getDomain('usuarios', 'usuarios')->transfer( $params );
-         }
+        }
+
+        //Método para obtener las push notifications por usuario.
+        public function getPushNotifications( $request ) {
+            $params = [
+                'idUsuario' => $request->getTokenData('idUsuario'),
+                'vigente' => true
+            ];
+
+            return $this->getDomain('usuarios', 'usuarios')->getPushNotifications( $params );
+        }
     }
 ?>
