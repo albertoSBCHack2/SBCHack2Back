@@ -119,6 +119,8 @@
 
                             //Marcamos que el reto ya fue ganado.
                             $this->getModel('usuarios', 'retos')->actualizar([
+                                'vigente' => false,   
+                            ], [
                                 'id_usuario_padrino_reta' => $reto['idUsuarioPadrinoReta'],
                                 'id_reto' => $reto['id_reto']
                             ]);
