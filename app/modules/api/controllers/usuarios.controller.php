@@ -72,7 +72,8 @@
         //Método para obtener los retos.
         public function getRetos( $request ) {
             $params = [
-                'idUsuario' => $request->getTokenData('idUsuario')
+                'idUsuario' => $request->getTokenData('idUsuario'),
+                'vigente' => $request->getQuery('vigente')
             ];
 
             if( $request->getTokenData('idRol') == 1 ) {

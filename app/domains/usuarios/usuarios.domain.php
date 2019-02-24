@@ -40,12 +40,21 @@
                 $this->setError('Ya existe un reto pendiente.');
             }
 
+            //Consultamos los ahijados del padrino.
+            $ahijados = $this->getModel('usuarios', 'padrinos-ahijados')->obtenerAhijados([
+                'idUsuario' => $params['idUsuarioPadrino']
+            ]);
+
+            //Calculamos el total a transferir.
+            $totalTransferir = $reto['monto'] * count( $ahijados ) + $reto['bono'];
+
             //Guardamos el reto.
             $idReto = $this->getModel('usuarios', 'retos')->agregar([
                 'id_usuario_padrino_reta' => $params['idUsuarioPadrino'],
                 'id_cuenta' => $params['idCuenta'],
                 'monto' => $params['monto'],
                 'bono' => $params['bono'],
+                'saldo_en_reto' => $totalTransferir,
                 'vigente' => true,
                 'fec_caducidad' => $fecCaducidad,
                 'fec_registro' => date('Y-m-d H:i:s')
@@ -95,26 +104,23 @@
                                 'numCuenta' => $params['transactionAmount']
                             ]);
 
-                            //Consultamos los ahijados del padrino.
-                            $ahijados = $this->getModel('usuarios', 'padrinos-ahijados')->obtenerAhijados([
-                                'idUsuario' => $reto['idUsuarioPadrinoReta']
-                            ]);
-
                             //Consultamos la cuenta del padrino.
                             $cuentaPadrino = $this->getModel('usuarios', 'usuarios')->getAccounts([
                                 'idUsuario' => $reto['idUsuarioPadrinoReta'],
                                 'idCuenta' => $reto['idCuenta']
                             ])[0];
 
-                            //Calculamos el total a transferir.
-                            $totalTransferir = $reto['monto'] * count( $ahijados ) + $reto['bono'];
-
-
                             $transfer2 = $this->getDomain('api', 'hsbc')->transfer([
                                 'sourceAccount' => $cuentaPadrino['numCuenta'],
                                 'destinationAccount' => $params['transactionAmount'],
-                                'transactionAmount' => $totalTransferir,
+                                'transactionAmount' => $reto['saldoEnReto'],
                                 'description' => 'Ganaste el reto',
+                            ]);
+
+                            //Marcamos que el reto ya fue ganado.
+                            $this->getModel('usuarios', 'retos')->actualizar([
+                                'id_usuario_padrino_reta' => $reto['idUsuarioPadrinoReta'],
+                                'id_reto' => $reto['id_reto']
                             ]);
                         }
                     }

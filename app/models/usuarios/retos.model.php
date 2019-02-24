@@ -16,5 +16,13 @@
         public function obtenerPorAhijado( $params ) {
             return $this->connection->exec('retos_por_ahijado', $params);
         }
+
+        //Método para actualizar.
+        public function actualizar( $set, $where ) {
+            $this->connection->update('retos', [
+                '_set' => $set,
+                '_where' => $where
+            ]);
+        }
     }
 ?>
