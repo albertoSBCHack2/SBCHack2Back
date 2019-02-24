@@ -94,11 +94,11 @@
             $response = $oCurl->post( json_encode( $accountParams ) );
             $responseJSON = json_decode( $response, true );
  
-            if( !( isset( $responseJSON['data'] ) && isset( $responseJSON['data']['MT_Level2AccountCreationResp_sync'] ) ) ) {
+            if( !( isset( $responseJSON['data']['MT_Level2AccountCreationResp_sync'] ) ) ) {
                 $this->setError('El folio ingresado ya fue utilizado.');
             }
 
-            $response = $responseJSON['data']['MT_Level2AccountCreationResp_sync']['Level2AccountCreationDataResponse'];
+            $response = $responseJSON['MT_Level2AccountCreationResp_sync']['Level2AccountCreationDataResponse'];
             
             //Ligamos esta cuenta con el usuario.
             $this->getModel('usuarios', 'cuentas')->agregar([
