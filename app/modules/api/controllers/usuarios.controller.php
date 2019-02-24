@@ -55,5 +55,17 @@
 
             $this->getDomain('usuarios', 'padrinos')->agregar( $params );
         }
+
+        //Método para agergar retos.
+        public function agregarReto( $requesst ) {
+            $params = [
+                'idUsuarioPadrino' => $request->getTokenData('idUsuario'),
+                'idUsuarioAhijado' => $request->getBody('idUsuarioAhijado'),
+                'diasDelReto' => $request->getBody('diasDelReto'),
+                'monto' => $request->getBody('monto')
+            ];
+
+            $this->getDomain('usuarios', 'usuarios')->agregarReto( $params );
+        }
     }
 ?>
