@@ -19,11 +19,11 @@ return [
       ['uri' => '/push-notifications', 'handler' => 'usuarios', 'method' => 'getPushNotifications', 'cors' => false, 'verifyToken' => true],
     ],
     'post' => [
-        ['uri' => '/login', 'handler' => 'usuarios', 'method' => 'logIn', 'cors' => true, 'verifyToken' => false],
-        ['uri' => '/hsbc/transfer', 'handler' => 'hsbc', 'method' => 'transfer', 'cors' => true, 'verifyToken' => true],
-        ['uri' => '/transfer', 'handler' => 'usuarios', 'method' => 'transfer', 'cors' => true, 'verifyToken' => true],
-        ['uri' => '/fin-lab/account/level2', 'handler' => 'fin-lab', 'method' => 'createAccount', 'cors' => true, 'verifyToken' => false],
-        ['uri' => '/accounts', 'handler' => 'cuentas', 'method' => 'agregar', 'cors' => true, 'verifyToken' => true],
-        ['uri' => '/reto', 'handler' => 'usuarios', 'method' => 'agregarReto', 'cors' => true, 'verifyToken' => true]
+        ['uri' => '/login', 'handler' => 'usuarios', 'method' => 'logIn', 'cors' => false, 'verifyToken' => false],
+        ['uri' => '/hsbc/transfer', 'handler' => 'hsbc', 'method' => 'transfer', 'cors' => false, 'verifyToken' => true],
+        ['uri' => '/transfer', 'handler' => 'usuarios', 'method' => 'transfer', 'cors' => false, 'verifyToken' => true],
+        ['uri' => '/fin-lab/account/level2', 'handler' => 'fin-lab', 'method' => 'createAccount', 'cors' => false, 'verifyToken' => true],
+        ['uri' => '/accounts', 'handler' => 'cuentas', 'method' => 'agregar', 'cors' => false, 'verifyToken' => true],
+        ['uri' => '/reto', 'handler' => 'usuarios', 'method' => 'agregarReto', 'cors' => false, 'verifyToken' => true]
     ]
 ];
