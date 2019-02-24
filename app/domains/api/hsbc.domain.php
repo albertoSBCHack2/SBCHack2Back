@@ -83,7 +83,7 @@
                 'transaction' => [
                     'sourceAccount' => $params['sourceAccount'],
                     'destinationAccount' => $params['destinationAccount'],
-                    'transactionAmount' => $params['transactionAmount'],
+                    'transactionAmount' => number_format( $params['transactionAmount'], 2, '.', ''),
                     'description' => $params['description']
                 ]
             ];
@@ -96,7 +96,7 @@
             $responseJSON = json_decode( $response, true );
 
             if( !isset( $responseJSON['transferResponse'] ) ) {
-                $this->setError('Hubo un problema al generar la transerencia con HSBC.');
+                $this->setError('Hubo un problema al generar la transferencia con HSBC.');
             }
 
             return $responseJSON['transferResponse'];

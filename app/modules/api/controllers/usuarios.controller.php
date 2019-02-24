@@ -55,5 +55,57 @@
 
             $this->getDomain('usuarios', 'padrinos')->agregar( $params );
         }
+
+        //Método para agergar retos.
+        public function agregarReto( $request ) {
+            $params = [
+                'idUsuarioPadrino' => $request->getTokenData('idUsuario'),
+                'nombrePadrino' => $request->getTokenData('nombre'),
+                'idCuenta' => $request->getBody('idCuenta'),
+                'diasDelReto' => $request->getBody('diasDelReto'),
+                'monto' => $request->getBody('monto'),
+                'bono' => $request->getBody('bono')
+            ];
+
+            $this->getDomain('usuarios', 'usuarios')->agregarReto( $params );
+        }
+
+        //Método para obtener los retos.
+        public function getRetos( $request ) {
+            $params = [
+                'idUsuario' => $request->getTokenData('idUsuario'),
+                'vigente' => $request->getQuery('vigente')
+            ];
+
+            if( $request->getTokenData('idRol') == 1 ) {
+                return $this->getDomain('usuarios', 'padrinos')->getRetos( $params );
+            } else {
+                return $this->getDomain('usuarios', 'ahijados')->getRetos( $params );
+            }
+        }
+
+        //Método para hacer transferencias.
+        public function transfer( $request ) {
+            $params = [
+                'sourceAccount' => $request->getBody('sourceAccount'),
+                'destinationAccount' => $request->getBody('destinationAccount'),
+                'transactionAmount' => $request->getBody('transactionAmount'),
+                'description' => $request->getBody('description'),
+                'idUsuario' => $request->getTokenData('idUsuario'),
+                'idRol' => $request->getTokenData('idRol')
+            ];
+ 
+            return $this->getDomain('usuarios', 'usuarios')->transfer( $params );
+        }
+
+        //Método para obtener las push notifications por usuario.
+        public function getPushNotifications( $request ) {
+            $params = [
+                'idUsuario' => $request->getTokenData('idUsuario'),
+                'vigente' => true
+            ];
+
+            return $this->getDomain('usuarios', 'usuarios')->getPushNotifications( $params );
+        }
     }
 ?>

@@ -21,10 +21,12 @@
             }
  
             return $this->connection
-                ->select('id_banco, num_cuenta')
+                ->select('id_usuario AS "idUsuario", id_cuenta AS "idCuenta", id_banco AS "idBanco", num_cuenta AS "numCuenta"')
                 ->from('cuentas')
                 ->where('id_usuario')->eq('idUsuario')
+                ->_and('id_cuenta')->eq('idCuenta')
                 ->_and('id_banco')->eq('idBanco')
+                ->_and('num_cuenta')->eq('numCuenta')
                 ->exec($params) ;
         }
     }

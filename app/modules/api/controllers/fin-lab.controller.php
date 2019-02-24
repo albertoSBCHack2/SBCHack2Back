@@ -6,7 +6,11 @@
                 'accountNumber' => $request->getParams('accountNumber')
             ];
 
-            return $this->getDomain('api', 'fin-lab')->getBalanceByAccount( $params );
+            $cuenta = $this->getDomain('api', 'fin-lab')->getBalanceByAccount( $params )[0];
+            $cuenta['numCuenta'] = $params['accountNumber'];
+            $cuenta['saldo'] = $cuenta['balance'];
+
+            return $cuenta;
         }
 
         //Método para obtener el los movimientos..

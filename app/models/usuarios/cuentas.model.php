@@ -6,6 +6,14 @@
                 '_insert' => $params
             ]);
         }
+
+        //Método para actualizar.
+        public function actualizar( $set, $where ) {
+            $this->connection->update('cuentas', [
+                '_set' => $set,
+                '_where' => $where
+            ]);
+        }
     }
 ?>
 
