@@ -105,7 +105,8 @@
                 'activa' => true
             ];
 
-            return $this->getDomain('usuarios', 'usuarios')->getPushNotifications( $params );
+            $push = $this->getDomain('usuarios', 'usuarios')->getPushNotifications( $params );
+            var_dump( $push ); die();
         }
     }
 ?>

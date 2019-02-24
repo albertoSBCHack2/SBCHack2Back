@@ -151,7 +151,7 @@
             $this->getModel('usuarios', 'push-notification')->actualizar([
                 'activa' => false
             ], [
-                'id_push_notification' => 300,//$pushNotification['idPushNotification']
+                'id_push_notification' => $pushNotification['idPushNotification']
             ]);
 
             return $pushNotification;
