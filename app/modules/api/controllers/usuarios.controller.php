@@ -62,6 +62,7 @@
                 'idUsuarioPadrino' => $request->getTokenData('idUsuario'),
                 'nombrePadrino' => $request->getTokenData('nombre'),
                 'idCuenta' => $request->getBody('idCuenta'),
+                'idBanco' => $request->getBody('idBanco'),
                 'diasDelReto' => $request->getBody('diasDelReto'),
                 'monto' => $request->getBody('monto'),
                 'bono' => $request->getBody('bono')
@@ -74,6 +75,7 @@
         public function getRetos( $request ) {
             $params = [
                 'idUsuario' => $request->getTokenData('idUsuario'),
+                'idBanco' => $request->getTokenData('idBanco'),
                 'vigente' => $request->getQuery('vigente')
             ];
 
