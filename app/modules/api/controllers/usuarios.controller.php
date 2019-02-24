@@ -73,6 +73,12 @@
             $params = [
                 'idUsuario' => $request->getTokenData('idUsuario')
             ];
+
+            if( $request->getTokenData('idRol') == 1 ) {
+                $this->getDomain('usuarios', 'padrinos')->getRetos( $params );
+            } else {
+                $this->getDomain('usuarios', 'ahijados')->getRetos( $params );
+            }
         }
     }
 ?>
