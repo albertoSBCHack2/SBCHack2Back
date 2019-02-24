@@ -90,7 +90,7 @@
             ]);
             $response = $oCurl->post( json_encode( $accountParams ) );
             $responseJSON = json_decode( $response, true );
-            
+            return $responseJSON;
             if( !( isset( $responseJSON['data'] ) && isset( $responseJSON['data']['statement_result'] ) ) ) {
                 $this->setError('Hubo un problema al crear la cuenta con FinLab.');
             }
