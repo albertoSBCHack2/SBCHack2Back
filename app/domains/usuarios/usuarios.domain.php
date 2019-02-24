@@ -130,6 +130,12 @@
                                 'id_usuario_padrino_reta' => $reto['idUsuarioPadrinoReta'],
                                 'id_reto' => $reto['id_reto']
                             ]);
+
+                            //Enviamos push al padrino.
+                            $this->getModel('usuarios', 'push-notification')->agregar([
+                                'id_usuario' => $reto['idUsuarioPadrinoReta'],
+                                'mensaje' => 'Se te ha descontado el saldo pendiente del reto. Uno de tus ahijados ha ganado.'
+                            ]);
                         }
                     }
                 }
