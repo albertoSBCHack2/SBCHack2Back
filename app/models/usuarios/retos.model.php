@@ -9,12 +9,7 @@
 
         //Método para obtener retos.
         public function obtenerPorPadrino( $params ) {
-            return $this->connection
-                ->select('id_reto, vigente')
-                ->from('retos')
-                ->where('id_usuario_padrino_reta')->eq('idUsuario')
-                ->_and('vigente')->eq('vigente')
-                ->exec($params);
+            return $this->connection->exec('retos_por_padrino', $params);
         }
 
         //Método para obtener retos.
