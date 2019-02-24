@@ -146,14 +146,15 @@
         //Método para obtener las push notifications por usuario.
         public function getPushNotifications( $params ) {
             $pushNotification = $this->getModel('usuarios', 'push-notification')->obtener( $params )[0] ?? null;
-
+            var_dump( $pushNotification );
             //La inactivamos.
             $this->getModel('usuarios', 'push-notification')->actualizar([
                 'activa' => false
             ], [
                 'id_push_notification' => $pushNotification['idPushNotification']
             ]);
-
+var_dump( $pushNotification );
+die();
             return $pushNotification;
         }
     }
