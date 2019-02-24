@@ -47,9 +47,9 @@
             }
 
             if( $this->lean->getIsXHR() ) {
-                //ob_clean();
-                //header('Content-Type: application/json; charset=utf-8');
-                var_dump( $response ); //json_encode($response, JSON_UNESCAPED_UNICODE );
+                ob_clean();
+                header('Content-Type: application/json; charset=utf-8');
+                echo json_encode($response, JSON_UNESCAPED_UNICODE );
             }
 
             return $response;

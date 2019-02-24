@@ -141,7 +141,7 @@ class Lean {
     }
 
     public function run() {
-        //ob_start();
+        ob_start();
 
         try {
             $success = true;
