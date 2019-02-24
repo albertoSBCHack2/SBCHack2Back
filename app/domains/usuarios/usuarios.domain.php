@@ -137,6 +137,8 @@
 
             if( count( $pushNotification ) > 0 ) {
                 $pushNotification = $pushNotification[ count( $pushNotification ) - 1 ];
+            } else {
+                $pushNotification = null;
             }
             
             //La inactivamos.
