@@ -119,6 +119,12 @@
                                 'id_usuario' => $reto['idUsuarioPadrinoReta'],
                                 'mensaje' => 'Se te ha descontado el saldo pendiente del reto. Uno de tus ahijados ha ganado.'
                             ]);
+
+                            //Enviamos push al ahijado ganador.
+                            $this->getModel('usuarios', 'push-notification')->agregar([
+                                'id_usuario' => $params['idUsuario'],
+                                'mensaje' => '¡Felicidades! Has ganado el reto.'
+                            ]);
                         }
                     }
                 }
