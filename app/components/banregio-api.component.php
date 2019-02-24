@@ -4,7 +4,9 @@
     class BanregioApiComponent extends BaseController{
       private static $headerString = 'Authorization: Bearer {token}';
 
-        private static function generarToken( $params ) {
+        public static function generarToken( $params ) {
+            $lean = Lean::getInstance();
+            $banregioConfig = $lean->getConfig('banregioData');
             $body = [
                 'grant_type' => $params['grantType'],
                 'code' => $params['code'],
@@ -19,7 +21,7 @@
             return json_decode($oCurl->post( http_build_query($body) ));
         }
 
-        private static function refrescarToken($params) {
+        public static function refrescarToken($params) {
             $lean = Lean::getInstance();
             $banregioConfig = $lean->getConfig('banregioData');
             $body = [
@@ -34,12 +36,11 @@
                 'url' => $banregioConfig['banregioBaseUrl'].'/oauth/token/'
             ]);
             $tokenData = json_decode($oCurl->post( http_build_query($body) ));
-            var_dump($body);  die();
             $paramsToken = [
                 'access_token' => $tokenData->access_token,
                 'refresh_token' => $tokenData->refresh_token,
             ];
-            $lean->getModel('banregio', 'banregio-token')->guardar( $paramsToken );
+            $lean->getDomain('api', 'banregio-token')->guardarToken( $paramsToken );
             return $paramsToken;
         }
 

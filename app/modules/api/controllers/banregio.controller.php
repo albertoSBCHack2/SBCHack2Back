@@ -18,7 +18,7 @@
                 'access_token' => $tokenData->access_token,
                 'refresh_token' => $tokenData->refresh_token,
             ];
-            return $this->getDomain('banregio', 'banregio')->guardarToken( $params );
+            return $this->getDomain('api', 'banregio')->guardarToken( $paramsToken );
         }
         //Método para obtener las cuentas
         public function obtenerCuentas($request)

@@ -10,31 +10,36 @@
             return $this->getModel('banregio', 'banregio-token')->obtener($params)[0] ?? null;
         }
 
-        public static function consultaTransacciones( $params )
+        public function consultaTransacciones( $params )
         {
             $oCurl = new CurlComponent([
-                'url' => $banregioConfig['banregioBaseUrl'].'/v1/accounts/'.$params['idCuenta'].'/transactions',
+                'url' => $this->getConfig('banregioData')['banregioBaseUrl'].'/v1/accounts/'.$params['idCuenta'].'/transactions',
                 'headers' => [
                   'Authorization: Bearer ' . $params['token']
                 ],
                 'followLocation' => 1
             ]);
-            $response = json_decode($oCurl->post( http_build_query($body) ));
+            $response = json_decode($oCurl->get());
 
-            if ($response->error) {
-                $tokenData = $this->refrescarToken($params);
-                $retryParams = [
-                    'idCuenta' => $params['idCuenta'],
-                    'token' => $tokenData['access_token'],
-                ];
-                $this->consultaTransacciones($retryParams);
+            if (isset($response->error)) {
+                if (isset($response->error->status_code)) {
+                  $this->setError($response->error->detail);
+                } else {
+                    $tokenData = BanregioApiComponent::refrescarToken($params);
+                    $retryParams = [
+                        'idCuenta' => $params['idCuenta'],
+                        'token' => $tokenData['access_token'],
+                    ];
+                    $this->consultaTransacciones($retryParams);
+
+                }
             }
 
             return $response;
         }
-        public static function consultaCuentas( $params )
+        public function consultaCuentas( $params )
         {
-            $uri =  $banregioConfig['banregioBaseUrl'].'/v1/accounts';
+            $uri =  $this->getConfig('banregioData')['banregioBaseUrl'].'/v1/accounts/';
             if (isset($params['idCuenta'])) {
                 $uri.=$params['idCuenta'];
             }
@@ -45,15 +50,19 @@
                 ],
                 'followLocation' => 1
             ]);
-            $response = json_decode($oCurl->post( http_build_query($body) ));
+            $response = json_decode($oCurl->get());
+            if (isset($response->error)) {
+                if (isset($response->error->status_code)) {
+                  $this->setError($response->error->detail);
+                } else {
+                    $tokenData = BanregioApiComponent::refrescarToken($params);
+                    $retryParams = [
+                        'idCuenta' => $params['idCuenta'],
+                        'token' => $tokenData['access_token'],
+                    ];
+                    $this->consultaCuentas($retryParams);
 
-            if ($response->error) {
-                $tokenData = $this->refrescarToken($params);
-                $retryParams = [
-                    'idCuenta' => $params['idCuenta'],
-                    'token' => $tokenData['access_token'],
-                ];
-                $this->consultaCuentas($retryParams);
+                }
             }
 
             return $response;
