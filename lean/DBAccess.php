@@ -158,7 +158,7 @@
 				}
 
 				//Begin transaction.
-				$this->begin();
+				//$this->begin();
 			}
 			catch( \PDOException $e )
 			{

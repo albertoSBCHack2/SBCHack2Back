@@ -9,7 +9,7 @@
 
         //Método para obtener las push.
         public function obtener( $params ) {
-            $this->connection
+            return $this->connection
                 ->select('id_push_notification AS "idPushNotification", mensaje')
                 ->from('push_notifications')
                 ->where('id_usuario')->eq('idUsuario')
