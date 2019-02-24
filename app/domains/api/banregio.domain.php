@@ -19,7 +19,7 @@
                 ],
                 'followLocation' => 1
             ]);
-            $response = json_decode($oCurl->get());
+            $response = json_decode($oCurl->get(), true);
 
             if (isset($response->error)) {
                 if (isset($response->error->status_code)) {
@@ -34,8 +34,7 @@
 
                 }
             }
-
-            return $response->transactions;
+            return $response['transactions'];
         }
         public function consultaCuentas( $params )
         {

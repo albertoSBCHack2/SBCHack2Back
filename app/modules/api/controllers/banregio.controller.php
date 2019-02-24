@@ -47,8 +47,8 @@
                 'idCuenta' =>$request->getParams('idAccount') ?? null,
             ];
             $cuenta = $this->getDomain('api', 'banregio')->consultaTransacciones( $params )[0];
-            $cuenta->numCuenta = $params['idCuenta'];
-            $cuenta->saldo = $cuenta->amount;
+            $cuenta['numCuenta'] = $params['idCuenta'];
+            $cuenta['saldo'] = $cuenta['amount'];
             return $cuenta;
         }
 
