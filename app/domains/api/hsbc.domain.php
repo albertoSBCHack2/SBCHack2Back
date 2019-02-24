@@ -83,7 +83,7 @@
                 'transaction' => [
                     'sourceAccount' => $params['sourceAccount'],
                     'destinationAccount' => $params['destinationAccount'],
-                    'transactionAmount' => $params['transactionAmount'],
+                    'transactionAmount' => number_format( $params['transactionAmount'], 2, '.', ''),
                     'description' => $params['description']
                 ]
             ];

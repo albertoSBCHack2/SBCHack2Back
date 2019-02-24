@@ -79,30 +79,30 @@
                     'vigente' => true
                 ])[0] ?? null;
 
-                if( $reto ) {
+                if( $reto && $params['transactionAmount'] >= $reto['monto'] ) {
                     //Quitamos las cuentas de ahorro.
-                    $this->getModel('usuarios', 'cuentas')->actualizar([
-                        'es_ahorro' => false
-                    ], [
-                        'id_usuario' => $params['idUsuario'],
-                        'es_ahorro' => true
-                    ]);
+                    // $this->getModel('usuarios', 'cuentas')->actualizar([
+                    //     'es_ahorro' => false
+                    // ], [
+                    //     'id_usuario' => $params['idUsuario'],
+                    //     'es_ahorro' => true
+                    // ]);
 
-                    //Marcamos que esta cuenta es la de ahorro.
-                    $this->getModel('usuarios', 'cuentas')->actualizar([
-                        'es_ahorro' => true
-                    ], [
-                        'num_cuenta' => $params['transactionAmount']
-                    ]);
+                    // //Marcamos que esta cuenta es la de ahorro.
+                    // $this->getModel('usuarios', 'cuentas')->actualizar([
+                    //     'es_ahorro' => true
+                    // ], [
+                    //     'num_cuenta' => $params['transactionAmount']
+                    // ]);
 
                     //Validamos si cumple con el reto.
                     if( $reto['vigente'] ) { //Se ha cumplido el reto. 
                         //Hacemos la transferencia al ahijado.
                         if( $params['idBanco'] == 1 ) {
                             //Consultamos la información de esta cuenta.
-                            $cuentaAhijado = $this->getModel('usuarios', 'usuarios')->getAccounts([
-                                'numCuenta' => $params['transactionAmount']
-                            ]);
+                            // $cuentaAhijado = $this->getModel('usuarios', 'usuarios')->getAccounts([
+                            //     'numCuenta' => $params['transactionAmount']
+                            // ]);
 
                             //Consultamos la cuenta del padrino.
                             $cuentaPadrino = $this->getModel('usuarios', 'usuarios')->getAccounts([
