@@ -9,6 +9,7 @@
           return $this->connection
               ->select('access_token, refresh_token')
               ->from('banregio_token')
+              ->orderBy('id_banregio_token DESC')
               ->exec($params) ;
         }
     }
