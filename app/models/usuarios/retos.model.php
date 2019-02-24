@@ -12,7 +12,7 @@
             return $this->connection
                 ->select('id_reto, vigente')
                 ->from('retos')
-                ->where('id_usuario_padrino_reta')->eq('idUsuarioPadrino')
+                ->where('id_usuario_padrino_reta')->eq('idUsuario')
                 ->_and('vigente')->eq('vigente')
                 ->exec($params);
         }
