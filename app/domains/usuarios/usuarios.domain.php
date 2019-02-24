@@ -41,7 +41,7 @@
             }
 
             //Guardamos el reto.
-            $idReto = $this->getModel('usaurios', 'retos')->agregar([
+            $idReto = $this->getModel('usuarios', 'retos')->agregar([
                 'id_usuario_padrino_reta' => $params['idUsuarioPadrino'],
                 'id_cuenta' => $params['idCuenta'],
                 'id_banco' => $params['idBanco'],
