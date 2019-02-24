@@ -46,7 +46,7 @@
             ]);
 
             //Calculamos el total a transferir.
-            $totalTransferir = $params['monto'] * count( $ahijados ) + $params['bono'];
+            $totalTransferir = $params['monto'] * 1 + $params['bono'];
 
             //Guardamos el reto.
             $idReto = $this->getModel('usuarios', 'retos')->agregar([
@@ -127,11 +127,11 @@
             $pushNotification = $this->getModel('usuarios', 'push-notification')->obtener( $params )[0] ?? null;
 
             //La inactivamos.
-            $this->getModel('usuarios', 'push-notification')->actualizar([
-                'activa' => false
-            ], [
-                'id_push_notification' => $pushNotification['idPushNotification']
-            ]);
+            // $this->getModel('usuarios', 'push-notification')->actualizar([
+            //     'activa' => false
+            // ], [
+            //     'id_push_notification' => $pushNotification['idPushNotification']
+            // ]);
 
             return $pushNotification;
         }
