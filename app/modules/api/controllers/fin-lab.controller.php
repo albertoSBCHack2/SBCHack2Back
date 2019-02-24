@@ -31,7 +31,9 @@
                 'fechaNacimiento' => $request->getBody('fechaNacimiento'),
                 'ine' => $request->getBody('ine'),
                 'cardIdentification' => $request->getBody('cardIdentification'),
-                'celular' => $request->getBody('celular')
+                'celular' => $request->getBody('celular'),
+                'idUsuario' => $request->getTokenData('idUsuario'),
+                'nombreAhijado' => $request->getTokenData('nombre')
             ];
 
             return $this->getDomain('api', 'fin-lab')->createAccount( $params );

@@ -93,12 +93,34 @@
             ]);
             $response = $oCurl->post( json_encode( $accountParams ) );
             $responseJSON = json_decode( $response, true );
- return $responseJSON;
-            if( !( isset( $responseJSON['data'] ) && isset( $responseJSON['data']['statement_result'] ) ) ) {
-                $this->setError('Hubo un problema al crear la cuenta con FinLab.');
+ 
+            if( !( isset( $responseJSON['data'] ) && isset( $responseJSON['data']['MT_Level2AccountCreationResp_sync'] ) ) ) {
+                $this->setError('El folio ingresado ya fue utilizado.');
             }
 
-            return $responseJSON['data']['statement_result'];
+            $response = $responseJSON['data']['MT_Level2AccountCreationResp_sync']['Level2AccountCreationDataResponse'];
+            
+            //Ligamos esta cuenta con el usuario.
+            $this->getModel('usuarios', 'cuentas')->agregar([
+                'id_usuario' => $params['idUsuario'],
+                'id_banco' => 2,
+                'num_cuenta' => $response['BusinessPartnerIDCreated']
+            ]);
+
+            //Buscamos al padrino de este usuario.
+            $padrinos = $this->getModel('usuarios', 'padrinos-ahijados')->obtenerPadrinos([
+                'idUsuario' => $params['idUsuario']
+            ]);
+
+            //Enviamos push al padrino.
+            foreach( $padrinos as $padrino ) {
+                $this->getModel('usuarios', 'push-notification')->agregar([
+                    'id_usuario' => $padrino['idUsuario'],
+                    'mensaje' => 'Tu ahijado ' . $params['nombreAhijado'] . ' acaba de crear una nueva cuenta de ahorro.'
+                ]);
+            }
+
+            return $response;
         }
     }
 ?>
