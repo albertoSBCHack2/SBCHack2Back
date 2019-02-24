@@ -57,7 +57,7 @@
                         'Gender' => '0',
                         'DocumentIdentifier' => [
                             'Code' => 'ZCVELE',
-                            'ID' => $params['ine']
+                            'ID' => 'ARMNJR92120714H700'
                         ],
                         'CardIdentification' => $params['cardIdentification'],
                         'RegionBirth' => 'DF',
@@ -66,7 +66,7 @@
                         'PhoneData' => [
                             'PhoneTypeID' => '6',
                             'PhoneNumber' => [
-                                'SubscriberID' => $params['celular']
+                                'SubscriberID' => '5543783455'
                             ]
                         ],
                         'AddressData' => [
