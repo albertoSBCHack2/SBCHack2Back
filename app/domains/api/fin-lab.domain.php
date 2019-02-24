@@ -38,7 +38,7 @@
         public function createAccount( $params ) {
             $accountParams = [
                 'MessageHeader' => [
-                    'CreationDateTime' => '2001-01-03T21 =>34 =>11Z'
+                    'CreationDateTime' => '2001-01-03T21:34:11Z'
                 ],
                 'Level2AccountCreationData' => [
                     'Identifiers' => [
