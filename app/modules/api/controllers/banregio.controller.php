@@ -46,7 +46,10 @@
                 'refreshToken' =>$token['refresh_token'],
                 'idCuenta' =>$request->getParams('idAccount') ?? null,
             ];
-            return $this->getDomain('api', 'banregio')->consultaTransacciones( $params );
+            $cuenta = $this->getDomain('api', 'banregio')->consultaTransacciones( $params )[0];
+            $cuenta->numCuenta = $params['idCuenta'];
+            $cuenta->saldo = $cuenta->amount;
+            return $cuenta;
         }
 
     }

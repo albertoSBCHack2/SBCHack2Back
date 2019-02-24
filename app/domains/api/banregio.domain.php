@@ -35,7 +35,7 @@
                 }
             }
 
-            return $response;
+            return $response->transactions;
         }
         public function consultaCuentas( $params )
         {
