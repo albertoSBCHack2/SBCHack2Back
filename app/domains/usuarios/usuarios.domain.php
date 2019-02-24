@@ -98,7 +98,7 @@
                             //Transferimos al ahijado.
                             $transfer2 = $this->getDomain('api', 'hsbc')->transfer([
                                 'sourceAccount' => $cuentaPadrino['numCuenta'],
-                                'destinationAccount' => $params['transactionAmount'],
+                                'destinationAccount' => $params['destinationAccount'],
                                 'transactionAmount' => $reto['saldoEnReto'],
                                 'description' => 'Reto ganado',
                             ]);
