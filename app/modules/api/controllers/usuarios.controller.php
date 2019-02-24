@@ -60,7 +60,7 @@
         public function agregarReto( $request ) {
             $params = [
                 'idUsuarioPadrino' => $request->getTokenData('idUsuario'),
-                'idBanco' => $request->getBody('idBanco'),
+                'idCuenta' => $request->getBody('idCuenta'),
                 'diasDelReto' => $request->getBody('diasDelReto'),
                 'monto' => $request->getBody('monto'),
                 'bono' => $request->getBody('bono')
