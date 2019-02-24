@@ -14,6 +14,7 @@
                 ->from('push_notifications')
                 ->where('id_usuario')->eq('idUsuario')
                 ->_and('activa')->eq('activa')
+                ->orderBy('id_push_notification')
                 ->exec($params);
         }
 

@@ -59,7 +59,7 @@
                             "Code" => "ZCVELE",
                             "ID" => "ARMNJR92120714H700"
                         ],
-                        "CardIdentification" => "2867249", //$params['cardIdentification']
+                        "CardIdentification" => $params['cardIdentification'],
                         "RegionBirth" => "DF",
                         "BirthCountryCode" => "MX",
                         "CitizenshipCode" => "MX",
@@ -84,13 +84,16 @@
                     ]
                 ]
             ];
-            
+
             $oCurl = new CurlComponent([
-                'url' => $this->baseURL . '/account/level2'
+                'url' => $this->baseURL . '/account/level2',
+                'headers' => [
+                    'Content-Type: application/json'
+                ]
             ]);
             $response = $oCurl->post( json_encode( $accountParams ) );
             $responseJSON = json_decode( $response, true );
-            return $responseJSON;
+ return $responseJSON;
             if( !( isset( $responseJSON['data'] ) && isset( $responseJSON['data']['statement_result'] ) ) ) {
                 $this->setError('Hubo un problema al crear la cuenta con FinLab.');
             }
