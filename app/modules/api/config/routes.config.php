@@ -15,7 +15,7 @@ return [
       ['uri' => '/users/{idUser}/godfathers', 'handler' => 'usuarios', 'method' => 'getGodFathers', 'cors' => false, 'verifyToken' => false],
       ['uri' => '/users/{idUser}/godsons', 'handler' => 'usuarios', 'method' => 'getGodSons', 'cors' => false, 'verifyToken' => false],
       ['uri' => '/users/{idUser}/accounts', 'handler' => 'usuarios', 'method' => 'getAccounts', 'cors' => false, 'verifyToken' => false],
-      ['uri' => '/retos', 'handler' => 'usuarios', 'method' => 'getRetos', 'cors' => false, 'verifyToken' => false],
+      ['uri' => '/retos', 'handler' => 'usuarios', 'method' => 'getRetos', 'cors' => false, 'verifyToken' => true],
     ],
     'post' => [
         ['uri' => '/login', 'handler' => 'usuarios', 'method' => 'logIn', 'cors' => true, 'verifyToken' => false],

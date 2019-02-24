@@ -15,9 +15,7 @@
 
         //Método para obtener los retos.
         public function getRetos( $params ) {
-            return $this->getModel('usuarios', 'retos')->obtenerPorAhijado([
-                'idUsuarioPadrino' => $params['idUsuario']
-            ]);
+            return $this->getModel('usuarios', 'retos')->obtenerPorAhijado($params);
         }
     }
 ?>
