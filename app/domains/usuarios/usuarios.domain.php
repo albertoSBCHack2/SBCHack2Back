@@ -108,7 +108,7 @@
                                 'vigente' => false,   
                             ], [
                                 'id_usuario_padrino_reta' => $reto['idUsuarioPadrinoReta'],
-                                'id_reto' => $reto['id_reto']
+                                'id_reto' => $reto['idReto']
                             ]);
 
                             //Enviamos push al padrino.
