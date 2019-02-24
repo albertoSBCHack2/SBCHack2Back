@@ -67,5 +67,12 @@
 
             $this->getDomain('usuarios', 'usuarios')->agregarReto( $params );
         }
+
+        //Método para obtener los retos.
+        public function getRetos( $request ) {
+            $params = [
+                'idUsuario' => $request->getTokenData('idUsuario')
+            ];
+        }
     }
 ?>

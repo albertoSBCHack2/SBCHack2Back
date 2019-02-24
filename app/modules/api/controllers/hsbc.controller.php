@@ -24,7 +24,11 @@
                 'accountNumber' => $request->getQuery('accountNumber')
             ];
         
-            return $this->getDomain('api', 'hsbc')->getBalanceByAccount( $params );
+            $cuenta = $this->getDomain('api', 'hsbc')->getBalanceByAccount( $params );
+            $cuenta['numCuenta'] = $params['accountNumber'];
+            $cuenta['saldo'] = $cuenta['available'];
+
+            return $cuenta;
          }
 
          //Método para obtener los movimientos

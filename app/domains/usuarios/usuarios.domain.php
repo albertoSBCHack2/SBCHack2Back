@@ -31,7 +31,7 @@
             $fecCaducidad = date( 'Y-m-d', strtotime( $fecCaducidad. ' + ' . $diasDelReto . ' days' ) );
 
             //Validamos que no exista un reto pendiente.
-            $retoPendiente = $this->getModel('usaurios', 'retos')->obtener([
+            $retoPendiente = $this->getModel('usaurios', 'retos')->obtenerPorPadrino([
                 'idUsuarioPadrino' => $params['idUsuarioPadrino'],
                 'vigente' => true
             ]);
