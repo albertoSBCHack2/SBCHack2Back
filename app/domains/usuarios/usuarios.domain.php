@@ -100,7 +100,7 @@
                                 'sourceAccount' => $cuentaPadrino['numCuenta'],
                                 'destinationAccount' => $params['transactionAmount'],
                                 'transactionAmount' => $reto['saldoEnReto'],
-                                'description' => 'Reto ganado!',
+                                'description' => 'Reto ganado',
                             ]);
 
                             //Marcamos que el reto ya fue ganado.
