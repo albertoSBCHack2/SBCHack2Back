@@ -95,8 +95,7 @@
                 'idRol' => $request->getTokenData('idRol')
             ];
  
-            $this->getDomain('usuarios', 'usuarios')->transfer( $params );
-            die();
+            return $this->getDomain('usuarios', 'usuarios')->transfer( $params );
         }
 
         //Método para obtener las push notifications por usuario.
