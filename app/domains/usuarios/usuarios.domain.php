@@ -43,7 +43,9 @@
             //Guardamos el reto.
             $idReto = $this->getModel('usaurios', 'retos')->agregar([
                 'id_usuario_padrino_reta' => $params['idUsuarioPadrino'],
+                'id_cuenta' => $params['idCuenta'],
                 'monto' => $params['monto'],
+                'bono' => $params['bono'],
                 'vigente' => true,
                 'fec_caducidad' => $fecCaducidad,
                 'fec_registro' => date('Y-m-d H:i:s')

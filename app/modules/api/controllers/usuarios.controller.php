@@ -75,9 +75,9 @@
             ];
 
             if( $request->getTokenData('idRol') == 1 ) {
-                $this->getDomain('usuarios', 'padrinos')->getRetos( $params );
+                return $this->getDomain('usuarios', 'padrinos')->getRetos( $params );
             } else {
-                $this->getDomain('usuarios', 'ahijados')->getRetos( $params );
+                return $this->getDomain('usuarios', 'ahijados')->getRetos( $params );
             }
         }
     }
