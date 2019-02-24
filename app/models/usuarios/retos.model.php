@@ -19,7 +19,7 @@
 
         //Método para obtener retos.
         public function obtenerPorAhijado( $params ) {
-            return $this->connection->execute('retos_por_ahijado', $params);
+            return $this->connection->exec('retos_por_ahijado', $params);
         }
     }
 ?>
