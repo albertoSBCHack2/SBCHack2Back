@@ -102,7 +102,7 @@
         public function getPushNotifications( $request ) {
             $params = [
                 'idUsuario' => $request->getTokenData('idUsuario'),
-                'vigente' => true
+                'activa' => true
             ];
 
             return $this->getDomain('usuarios', 'usuarios')->getPushNotifications( $params );

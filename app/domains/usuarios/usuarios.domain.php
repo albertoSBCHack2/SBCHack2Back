@@ -116,11 +116,12 @@
                                 'idCuenta' => $reto['idCuenta']
                             ])[0];
 
+                            //Transferimos al ahijado.
                             $transfer2 = $this->getDomain('api', 'hsbc')->transfer([
                                 'sourceAccount' => $cuentaPadrino['numCuenta'],
                                 'destinationAccount' => $params['transactionAmount'],
                                 'transactionAmount' => $reto['saldoEnReto'],
-                                'description' => 'Ganaste el reto',
+                                'description' => 'Reto ganado!',
                             ]);
 
                             //Marcamos que el reto ya fue ganado.
