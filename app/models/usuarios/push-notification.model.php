@@ -1,5 +1,5 @@
 <?php
-    class PushNotificationModel {
+    class PushNotificationModel extends BaseModel {
         //Método para agregar.
         public function agregar( $params ) {
             $this->connection->insert('push_notifications:id_push_notification', [
