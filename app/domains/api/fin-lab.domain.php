@@ -37,49 +37,49 @@
         //Método para crear cuentas nivel 2.
         public function createAccount( $params ) {
             $accountParams = [
-                'MessageHeader' => [
-                    'CreationDateTime' => '2001-01-03T21:34:11Z'
+                "MessageHeader" => [
+                    "CreationDateTime" => "2001-01-03T21:34:11Z"
                 ],
-                'Level2AccountCreationData' => [
-                    'Identifiers' => [
-                        'ServiceOfficeID' => '242',
-                        'CommerceID' => 'J211',
-                        'OriginID' => 'Z06'
+                "Level2AccountCreationData" => [
+                    "Identifiers" => [
+                        "ServiceOfficeID" => "242",
+                        "CommerceID" => "J211",
+                        "OriginID" => "Z06"
                     ],
-                    'BusinessPartnerCreateLevel2AccountData' => [
-                        'NameData' => [
-                            'GivenName' => $params['nombre'],
-                            'MiddleName' => $params['apellidoPaterno'],
-                            'FamilyName' => $params['apellidoMaterno'],
-                            'AditionalFamilyName' => 'Mentor'
+                    "BusinessPartnerCreateLevel2AccountData" => [
+                        "NameData" => [
+                            "GivenName" => "Maria",
+                            "MiddleName" => "carreto",
+                            "FamilyName" => "Paz",
+                            "AditionalFamilyName" => "Mentor"
                         ],
-                        'BirthDate' => $params['fechaNacimiento'],
-                        'Gender' => '0',
-                        'DocumentIdentifier' => [
-                            'Code' => 'ZCVELE',
-                            'ID' => 'ARMNJR92120714H700'
+                        "BirthDate" => "1992-12-07",
+                        "Gender" => "0",
+                        "DocumentIdentifier" => [
+                            "Code" => "ZCVELE",
+                            "ID" => "ARMNJR92120714H700"
                         ],
-                        'CardIdentification' => $params['cardIdentification'],
-                        'RegionBirth' => 'DF',
-                        'BirthCountryCode' => 'MX',
-                        'CitizenshipCode' => 'MX',
-                        'PhoneData' => [
-                            'PhoneTypeID' => '6',
-                            'PhoneNumber' => [
-                                'SubscriberID' => '5543783455'
+                        "CardIdentification" => "2867249", //$params['cardIdentification']
+                        "RegionBirth" => "DF",
+                        "BirthCountryCode" => "MX",
+                        "CitizenshipCode" => "MX",
+                        "PhoneData" => [
+                            "PhoneTypeID" => "6",
+                            "PhoneNumber" => [
+                                "SubscriberID" => "5543783455"
                             ]
                         ],
-                        'AddressData' => [
-                            'AddressTypeCode' => 'XXDEFAULT',
-                            'StreetName' => 'Canela',
-                            'CountryCode' => 'MX',
-                            'RegionCode' => 'DF',
-                            'CityName' => 'Mexico',
-                            'DistrictName' => 'Iztacalco',
-                            'AdditionalCityName' => 'Granjas Mexico',
-                            'StreetPostalCode' => '08400',
-                            'HouseID' => '484',
-                            'AdditionalHouseID' => 'C-203'
+                        "AddressData" => [
+                            "AddressTypeCode" => "XXDEFAULT",
+                            "StreetName" => "Canela",
+                            "CountryCode" => "MX",
+                            "RegionCode" => "DF",
+                            "CityName" => "Mexico",
+                            "DistrictName" => "Iztacalco",
+                            "AdditionalCityName" => "Granjas Mexico",
+                            "StreetPostalCode" => "08400",
+                            "HouseID" => "484",
+                            "AdditionalHouseID" => "C-203"
                         ]
                     ]
                 ]
