@@ -47,7 +47,9 @@
                 'sourceAccount' => $request->getBody('sourceAccount'),
                 'destinationAccount' => $request->getBody('destinationAccount'),
                 'transactionAmount' => $request->getBody('transactionAmount'),
-                'description' => $request->getBody('description')
+                'description' => $request->getBody('description'),
+                'idUsuario' => $request->getTokenData('idUsuario'),
+                'idRol' => $request->getTokenData('idRol')
             ];
  
             return $this->getDomain('api', 'hsbc')->transfer( $params );
