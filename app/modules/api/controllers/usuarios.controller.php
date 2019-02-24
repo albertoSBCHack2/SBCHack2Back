@@ -61,8 +61,10 @@
             $params = [
                 'idUsuarioPadrino' => $request->getTokenData('idUsuario'),
                 'idUsuarioAhijado' => $request->getBody('idUsuarioAhijado'),
+                'idBanco' => $request->getBody('idBanco'),
                 'diasDelReto' => $request->getBody('diasDelReto'),
-                'monto' => $request->getBody('monto')
+                'monto' => $request->getBody('monto'),
+                'bono' => $request->getBody('bono')
             ];
 
             $this->getDomain('usuarios', 'usuarios')->agregarReto( $params );

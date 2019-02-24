@@ -104,7 +104,7 @@
                 $reto = $this->getModel('usuarios', 'retos')->obtenerPorAhijado([
                     'idUsuario' => $params['idUsuario'],
                     'vigente' => true
-                ]);
+                ])[0] ?? null;
 
                 if( $reto ) {
                     //Quitamos las cuentas de ahorro.
@@ -121,6 +121,11 @@
                     ], [
                         'num_cuenta' => $params['transactionAmount']
                     ]);
+
+                    //Validamos si cumple con el reto.
+                    if( $reto['vigente'] ) {
+                        //Se ha cumplido el reto.
+                    }
                 }
             }
 
