@@ -147,6 +147,7 @@
         public function getPushNotifications( $params ) {
             $pushNotification = $this->getModel('usuarios', 'push-notification')->obtener( $params )[0] ?? null;
             $idPushNotification = $pushNotification['idPushNotification'];
+            DBAccess::commit();
 
             //La inactivamos.
             $this->getModel('usuarios', 'push-notification')->actualizar([
