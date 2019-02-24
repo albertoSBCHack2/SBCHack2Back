@@ -46,7 +46,8 @@
             ]);
 
             //Calculamos el total a transferir.
-            $totalTransferir = $params['monto'] * 1 + $params['bono'];
+            $totalGanaAhijado = $params['monto'] * 1 + $params['bono'];
+            $totalRestarPadrino = $params['monto'] * count( $ahijados ) + $params['bono'];
 
             //Guardamos el reto.
             $idReto = $this->getModel('usuarios', 'retos')->agregar([
@@ -55,7 +56,8 @@
                 'id_banco' => $params['idBanco'],
                 'monto' => $params['monto'],
                 'bono' => $params['bono'],
-                'saldo_en_reto' => $totalTransferir,
+                'saldo_en_reto' => $totalGanaAhijado,
+                'restar_padrino' => $totalRestarPadrino,
                 'vigente' => true,
                 'fec_caducidad' => $fecCaducidad,
                 'fec_registro' => date('Y-m-d H:i:s')
