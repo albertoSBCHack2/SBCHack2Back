@@ -94,8 +94,8 @@
             ]);
             $response = $oCurl->post( json_encode( $transaction ) );
             $responseJSON = json_decode( $response, true );
-            var_dump( isset( $responseJSON['transferResponse'] ) );
-          var_dump( $responseJSON ); die();
+            var_dump( $transaction );
+          var_dump( $responseJSON );
             if( !isset( $responseJSON['transferResponse'] ) ) {
                 $this->setError('Hubo un problema al generar la transferencia con HSBC.');
             }
