@@ -14,7 +14,7 @@ return [
       ['uri' => '/fin-lab/bank/{accountNumber}/transactions', 'handler' => 'fin-lab', 'method' => 'getTransactions', 'cors' => false, 'verifyToken' => false],
       ['uri' => '/users/{idUser}/godfathers', 'handler' => 'usuarios', 'method' => 'getGodFathers', 'cors' => false, 'verifyToken' => false],
       ['uri' => '/users/{idUser}/godsons', 'handler' => 'usuarios', 'method' => 'getGodSons', 'cors' => false, 'verifyToken' => false],
-      ['uri' => '/users/{idUser}/accounts', 'handler' => 'usuarios', 'method' => 'getAccounts', 'cors' => false, 'verifyToken' => false],
+      ['uri' => '/users/{idUser}/accounts', 'handler' => 'usuarios', 'method' => 'getAccounts', 'cors' => false, 'verifyToken' => true],
       ['uri' => '/retos', 'handler' => 'usuarios', 'method' => 'getRetos', 'cors' => false, 'verifyToken' => true],
       ['uri' => '/push-notifications', 'handler' => 'usuarios', 'method' => 'getPushNotifications', 'cors' => false, 'verifyToken' => true],
     ],
